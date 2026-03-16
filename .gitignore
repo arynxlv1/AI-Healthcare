@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+.env
+*.db
+*.sqlite3
+
+# Node
+node_modules/
+dist/
+build/
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Backend specific
+backend/app/__pycache__/
+backend/venv/
+
+# AI models (large files)
+ml/models/*.onnx
+*.onnx
+
+# Audit logs
+audit_logs.json

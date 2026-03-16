@@ -1,0 +1,202 @@
+[
+    {
+        "code": "J11.1",
+        "description": "Influenza due to unidentified influenza virus with other respiratory manifestations."
+    },
+    {
+        "code": "J00",
+        "description": "Acute nasopharyngitis [common cold]. Symptoms: runny nose, sneezing, sore throat."
+    },
+    {
+        "code": "J18.9",
+        "description": "Pneumonia, unspecified organism. Inflammation of one or both lungs with fluid."
+    },
+    {
+        "code": "U07.1",
+        "description": "COVID-19, virus identified. Respiratory syndrome caused by SARS-CoV-2."
+    },
+    {
+        "code": "I10",
+        "description": "Essential (primary) hypertension. High blood pressure without identifiable cause."
+    },
+    {
+        "code": "E11.9",
+        "description": "Type 2 diabetes mellitus without complications. Blood sugar regulation issues."
+    },
+    {
+        "code": "G43.909",
+        "description": "Migraine, unspecified, not intractable, without status migrainosus. Severe headache."
+    },
+    {
+        "code": "M54.5",
+        "description": "Low back pain. Pain in the lumbar region of the spine."
+    },
+    {
+        "code": "L20.9",
+        "description": "Atopic dermatitis, unspecified. Itchy, inflamed skin (eczema)."
+    },
+    {
+        "code": "K21.9",
+        "description": "Gastro-esophageal reflux disease without esophagitis. Heartburn or acid reflux."
+    },
+    {
+        "code": "Z01.11",
+        "description": "Synthetic medical condition 11: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.12",
+        "description": "Synthetic medical condition 12: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.13",
+        "description": "Synthetic medical condition 13: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.14",
+        "description": "Synthetic medical condition 14: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.15",
+        "description": "Synthetic medical condition 15: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.16",
+        "description": "Synthetic medical condition 16: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.17",
+        "description": "Synthetic medical condition 17: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.18",
+        "description": "Synthetic medical condition 18: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.19",
+        "description": "Synthetic medical condition 19: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.20",
+        "description": "Synthetic medical condition 20: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.21",
+        "description": "Synthetic medical condition 21: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.22",
+        "description": "Synthetic medical condition 22: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.23",
+        "description": "Synthetic medical condition 23: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.24",
+        "description": "Synthetic medical condition 24: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.25",
+        "description": "Synthetic medical condition 25: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.26",
+        "description": "Synthetic medical condition 26: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.27",
+        "description": "Synthetic medical condition 27: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.28",
+        "description": "Synthetic medical condition 28: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.29",
+        "description": "Synthetic medical condition 29: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.30",
+        "description": "Synthetic medical condition 30: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.31",
+        "description": "Synthetic medical condition 31: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.32",
+        "description": "Synthetic medical condition 32: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.33",
+        "description": "Synthetic medical condition 33: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.34",
+        "description": "Synthetic medical condition 34: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.35",
+        "description": "Synthetic medical condition 35: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.36",
+        "description": "Synthetic medical condition 36: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.37",
+        "description": "Synthetic medical condition 37: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.38",
+        "description": "Synthetic medical condition 38: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.39",
+        "description": "Synthetic medical condition 39: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.40",
+        "description": "Synthetic medical condition 40: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.41",
+        "description": "Synthetic medical condition 41: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.42",
+        "description": "Synthetic medical condition 42: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.43",
+        "description": "Synthetic medical condition 43: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.44",
+        "description": "Synthetic medical condition 44: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.45",
+        "description": "Synthetic medical condition 45: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.46",
+        "description": "Synthetic medical condition 46: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.47",
+        "description": "Synthetic medical condition 47: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.48",
+        "description": "Synthetic medical condition 48: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.49",
+        "description": "Synthetic medical condition 49: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    },
+    {
+        "code": "Z01.50",
+        "description": "Synthetic medical condition 50: Patient presents with phantom symptoms for testing RAG retrieval logic."
+    }
+]

@@ -1,0 +1,26 @@
+# Federated Health AI - Hospital Client Configuration
+
+# Connection Details
+server_url: "localhost:8080"
+hospital_id: "HOSP_001"
+api_key: "your_secret_api_key_here"
+
+# Data Path
+# Supports CSV or FHIR R4 JSON
+data_path: "data/patient_records.csv"
+data_format: "csv" 
+
+# Training Hyperparameters
+local_epochs: 3
+batch_size: 32
+learning_rate: 0.001
+
+# Differential Privacy (Opacus)
+# Plan specified ε=0.5, δ=1e-5, max_norm=1.0
+dp_enabled: true
+epsilon: 0.5
+delta: 0.00001
+max_grad_norm: 1.0
+
+# Hardware
+device: "cpu" # Default to CPU for maximum compatibility
