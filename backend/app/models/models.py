@@ -17,7 +17,8 @@ class User(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     hospital = relationship("Hospital", back_populates="users")
-    triage_sessions = relationship("TriageSession", back_populates="patient")
+    patient_triage_sessions = relationship("TriageSession", foreign_keys="[TriageSession.patient_id]", back_populates="patient")
+    doctor_triage_sessions = relationship("TriageSession", foreign_keys="[TriageSession.doctor_id]", back_populates="doctor")
 
 class Hospital(Base):
     __tablename__ = "hospitals"
@@ -56,9 +57,9 @@ class TriageSession(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
-    patient = relationship("User", foreign_keys=[patient_id], back_populates="triage_sessions")
+    patient = relationship("User", foreign_keys=[patient_id], back_populates="patient_triage_sessions")
     hospital = relationship("Hospital", back_populates="triage_sessions")
-    doctor = relationship("User", foreign_keys=[doctor_id])
+    doctor = relationship("User", foreign_keys=[doctor_id], back_populates="doctor_triage_sessions")
 
 class FLRound(Base):
     __tablename__ = "fl_rounds"

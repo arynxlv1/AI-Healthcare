@@ -6,42 +6,70 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+// Glass card — dark theme
 export const Card = ({ children, className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("bg-card text-card-foreground rounded-xl border shadow-sm p-6", className)} {...props}>
+  <div
+    className={cn(
+      "bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-6",
+      className
+    )}
+    {...props}
+  >
     {children}
   </div>
 );
 
-export const Badge = ({ children, variant = 'default', className }: { 
-  children: React.ReactNode, 
-  variant?: 'default' | 'urgent' | 'warning' | 'success',
-  className?: string 
+export const Badge = ({
+  children,
+  variant = 'default',
+  className,
+}: {
+  children: React.ReactNode;
+  variant?: 'default' | 'urgent' | 'warning' | 'success';
+  className?: string;
 }) => {
   const variants = {
-    default: "bg-secondary text-secondary-foreground",
-    urgent: "bg-destructive text-destructive-foreground animate-pulse",
-    warning: "bg-yellow-500 text-white",
-    success: "bg-green-500 text-white"
+    default:  'bg-white/10 text-slate-300 border border-white/10',
+    urgent:   'bg-red-500/20 text-red-400 border border-red-500/30 animate-pulse',
+    warning:  'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30',
+    success:  'bg-green-500/20 text-green-400 border border-green-500/30',
   };
   return (
-    <span className={cn("inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors", variants[variant], className)}>
+    <span
+      className={cn(
+        'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors',
+        variants[variant],
+        className
+      )}
+    >
       {children}
     </span>
   );
 };
 
-export const MetricCard = ({ label, value, description, icon: Icon }: {
-  label: string,
-  value: string | number,
-  description?: string,
-  icon?: any
+export const MetricCard = ({
+  label,
+  value,
+  description,
+  icon: Icon,
+  accent,
+}: {
+  label: string;
+  value: string | number;
+  description?: string;
+  icon?: any;
+  accent?: string;
 }) => (
-  <Card className="flex flex-col gap-1">
+  <Card className="flex flex-col gap-2">
     <div className="flex items-center justify-between">
-      <p className="text-sm font-medium text-muted-foreground">{label}</p>
-      {Icon && <Icon className="h-4 w-4 text-muted-foreground" />}
+      <p className="text-xs font-medium text-slate-400 uppercase tracking-wider">{label}</p>
+      {Icon && (
+        <div className={cn('p-2 rounded-lg', accent ?? 'bg-blue-500/10')}>
+          <Icon className={cn('h-4 w-4', accent ? 'text-current' : 'text-blue-400')} />
+        </div>
+      )}
     </div>
-    <p className="text-2xl font-bold">{value}</p>
-    {description && <p className="text-xs text-muted-foreground">{description}</p>}
+    <p className="text-2xl font-bold text-white">{value}</p>
+    {description && <p className="text-xs text-slate-500">{description}</p>}
   </Card>
 );

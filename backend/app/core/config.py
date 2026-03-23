@@ -26,6 +26,9 @@ class Settings(BaseSettings):
     DP_DELTA: float = 1e-5
     MAX_GRAD_NORM: float = 1.0
 
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+    model_config = SettingsConfigDict(
+        env_file=("../.env", ".env"), 
+        extra="ignore"
+    )
 
 settings = Settings()
