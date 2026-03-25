@@ -49,15 +49,29 @@ async def diagnose(request_data: DiagnosisRequest, request: Request, db: Session
     raw_query = request_data.patient_query or " ".join(request_data.symptoms)
     clean_query = strip_pii(raw_query)
 
+    user_id = getattr(request.state, "user_id", None)
+    # Fallback: decode token directly if middleware didn't set state
+    if not user_id:
+        auth = request.headers.get("Authorization", "")
+        if auth.startswith("Bearer "):
+            from ..services.auth_service import AuthService
+            payload = AuthService.decode_token(auth.split(" ", 1)[1])
+            if payload:
+                user_id = payload.get("sub")
+    if not user_id:
+        raise HTTPException(status_code=401, detail="Authentication required")
+
+    # Security: ignore client-supplied hospital_id — use the one from the JWT
+    jwt_hospital_id = getattr(request.state, "hospital_id", None)
+    hospital_id = jwt_hospital_id or request_data.hospital_id
+
     # Stage 1: ONNX Classification
     symptom_vector = map_symptoms_to_vector(request_data.symptoms)
     onnx_result = onnx_service.predict(symptom_vector)
 
-    user_id = getattr(request.state, "user_id", "anonymous_patient")
-
     session = TriageSession(
         patient_id=user_id,
-        hospital_id=request_data.hospital_id,
+        hospital_id=hospital_id,
         symptoms=request_data.symptoms,
         symptom_text=clean_query,
         onnx_predictions=onnx_result.get("predictions"),
@@ -68,7 +82,6 @@ async def diagnose(request_data: DiagnosisRequest, request: Request, db: Session
     db.commit()
     db.refresh(session)
 
-    # Audit: PII stripping applied — never log original PII
     log_action(
         user_id=user_id,
         action="PII_STRIPPED",

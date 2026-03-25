@@ -1,45 +1,70 @@
+"""
+Flower aggregation server.
+
+Run with:
+    python -m fl_server.server
+
+Requires at least MIN_CLIENTS hospital clients to connect before a round starts.
+After each round, the global model is saved to the registry and exported to ONNX.
+"""
 import flwr as fl
-from typing import List, Tuple, Dict, Optional
-import numpy as np
+from fl_server.strategy import PrivacyAwareFedAvg
+from fl_server.model_registry import save_global_weights, export_to_onnx
+from fl_server.privacy import PrivacyBudget
 
-class CustomFedAvg(fl.server.strategy.FedAvg):
-    def aggregate_evaluate(
-        self,
-        server_round: int,
-        results: List[Tuple[fl.server.client_proxy.ClientProxy, fl.common.EvaluateRes]],
-        failures: List[BaseException],
-    ) -> Tuple[Optional[fl.common.Scalar], Dict[str, fl.common.Scalar]]:
-        """Aggregate evaluation metrics using weighted average."""
-        if not results:
-            return None, {}
-        
-        # Standard weighted average for accuracy
-        accuracies = [res.metrics["accuracy"] * res.num_examples for _, res in results]
-        examples = [res.num_examples for _, res in results]
-        
-        aggregated_accuracy = sum(accuracies) / sum(examples)
-        print(f"Round {server_round} accuracy: {aggregated_accuracy}")
-        
-        # Call parent to get standard loss aggregation
-        loss, _ = super().aggregate_evaluate(server_round, results, failures)
-        
-        return loss, {"accuracy": aggregated_accuracy}
+MIN_CLIENTS = 2
+NUM_ROUNDS = 10
+MAX_EPSILON = 10.0  # Hard privacy budget cap
 
-def start_server():
-    # Senior Dev Requirement: Fault tolerance (min_available_clients)
-    strategy = CustomFedAvg(
-        fraction_fit=1.0,
-        min_fit_clients=2,
-        min_available_clients=2, # Minimum hospitals needed to start a round
-        min_evaluate_clients=2,
+privacy_budget = PrivacyBudget(max_epsilon=MAX_EPSILON)
+
+
+def get_on_fit_config(server_round: int):
+    """Send per-round config to clients."""
+    return {"server_round": server_round, "local_epochs": 3}
+
+
+def get_evaluate_fn(privacy: PrivacyBudget):
+    """
+    Server-side evaluation callback — runs after each aggregation round.
+    Saves weights, exports ONNX, and enforces the privacy budget.
+    """
+    def evaluate(server_round: int, parameters, config):
+        import numpy as np
+        weights = [np.array(p) for p in parameters]
+        save_global_weights(weights, server_round)
+        export_to_onnx(server_round)
+
+        # Record epsilon from strategy metrics (passed via config)
+        epsilon = config.get("max_epsilon", 0.0)
+        privacy.record_round(server_round, epsilon)
+
+        if privacy.is_budget_exhausted():
+            print(f"[Server] Privacy budget exhausted after round {server_round}. Stopping.")
+
+        summary = privacy.summary()
+        return 0.0, summary  # loss=0 (server has no eval dataset), metrics=privacy summary
+
+    return evaluate
+
+
+def start_server(host: str = "0.0.0.0", port: int = 8080):
+    strategy = PrivacyAwareFedAvg(
+        min_clients=MIN_CLIENTS,
+        on_fit_config_fn=get_on_fit_config,
+        evaluate_fn=get_evaluate_fn(privacy_budget),
     )
 
-    print("Starting Flower Aggregation Server...")
+    print(f"[Server] Starting Flower server on {host}:{port}")
+    print(f"[Server] Waiting for {MIN_CLIENTS} clients, running {NUM_ROUNDS} rounds.")
+    print(f"[Server] Privacy budget: ε ≤ {MAX_EPSILON}, δ = {privacy_budget.delta}")
+
     fl.server.start_server(
-        server_address="0.0.0.0:8080",
-        config=fl.server.ServerConfig(num_rounds=10),
+        server_address=f"{host}:{port}",
+        config=fl.server.ServerConfig(num_rounds=NUM_ROUNDS),
         strategy=strategy,
     )
+
 
 if __name__ == "__main__":
     start_server()

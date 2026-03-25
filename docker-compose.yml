@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:///./app.db
+      - REDIS_URL=redis://redis:6379/0
+      - SECRET_KEY=change-me-in-production
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      - OLLAMA_MODEL=llama3.2:latest
+    depends_on:
+      - redis
+    volumes:
+      - ./ml:/app/ml
+      - ./scripts:/app/scripts
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+  fl-server:
+    build:
+      context: .
+      dockerfile: fl_server/Dockerfile
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    profiles:
+      - fl  # Only starts with: docker compose --profile fl up

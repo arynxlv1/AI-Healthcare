@@ -1,29 +1,25 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
 from .routers import ai, auth, triage, fl, ws, audit, train
 from .core.config import settings
-
 from .middleware.rbac import rbac_middleware
 
 app = FastAPI(title="Federated Health AI API")
 
-# Configure CORS (Standard Middleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:3000",
         "http://127.0.0.1:3000",
-        "http://localhost:5173", # Standard Vite port
+        "http://localhost:5173",
     ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Configure RBAC Middleware
-@app.middleware("http")
-async def add_rbac_middleware(request, call_next):
-    return await rbac_middleware(request, call_next)
+app.add_middleware(BaseHTTPMiddleware, dispatch=rbac_middleware)
 
 # Include Routers
 @app.get("/health")

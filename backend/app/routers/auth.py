@@ -32,6 +32,9 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = 
         "role": user.role
     }
 
-@router.post("/register")
+@router.post("/register", status_code=status.HTTP_403_FORBIDDEN)
 async def register():
-    return {"message": "User registration is currently disabled for demo security"}
+    raise HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN,
+        detail="User registration is disabled. Contact your administrator."
+    )

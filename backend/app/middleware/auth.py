@@ -22,7 +22,8 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
     if user_id is None:
         raise credentials_exception
         
-    user = db.query(User).filter(User.id == user_id).first()
+    # sub is stored as email (see auth router), so filter by email not id
+    user = db.query(User).filter(User.email == user_id).first()
     if user is None:
         raise credentials_exception
         
