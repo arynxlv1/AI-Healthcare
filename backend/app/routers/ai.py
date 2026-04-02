@@ -11,6 +11,7 @@ from ..services.rag_service import rag_ingestor
 from ..services.audit_service import log_action
 from ..middleware.pii_stripper import strip_pii
 from ..core.mapping import map_symptoms_to_vector
+from app.core.limiter import limiter
 
 router = APIRouter()
 
@@ -44,7 +45,8 @@ class HistoryItem(BaseModel):
 
 
 @router.post("/diagnose")
-async def diagnose(request_data: DiagnosisRequest, request: Request, db: Session = Depends(get_db)):
+@limiter.limit("30/minute")
+async def diagnose(request: Request, request_data: DiagnosisRequest, db: Session = Depends(get_db)):
     # Stage 0: PII Stripping
     raw_query = request_data.patient_query or " ".join(request_data.symptoms)
     clean_query = strip_pii(raw_query)

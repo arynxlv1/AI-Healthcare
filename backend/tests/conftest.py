@@ -6,6 +6,7 @@ import os
 os.environ.setdefault("DATABASE_URL", "sqlite:///./test_pytest.db")
 os.environ.setdefault("REDIS_URL", "redis://localhost:6379/0")
 os.environ.setdefault("SECRET_KEY", "test-secret-key-not-for-production")
+os.environ.setdefault("TESTING", "true")
 
 import pytest
 from httpx import AsyncClient, ASGITransport
