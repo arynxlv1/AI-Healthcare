@@ -32,7 +32,9 @@ const ProtectedRoute = ({ children, allowedRoles }: { children: React.ReactNode,
 
 const NavBarWrapper = () => {
   const location = useLocation();
-  if (location.pathname === '/login') return null;
+  // Login page has no sidebar — show the old NavBar only there (it returns null when no user anyway)
+  // Authenticated pages use Sidebar instead
+  if (location.pathname !== '/login') return null;
   return <NavBar />;
 };
 
