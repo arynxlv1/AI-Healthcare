@@ -7,7 +7,8 @@ from tests.conftest import get_token
 def test_diagnose_uses_jwt_hospital_id(client):
     """
     Security regression: client-supplied hospital_id must be ignored.
-    The session should be stored under the JWT's hospital_id, not the request body's.
+    The session must be stored under the JWT's hospital_id (HOSP_001),
+    not the attacker-supplied value in the request body.
     """
     token = get_token(client, "patient@example.com")
     r = client.post(
@@ -18,7 +19,19 @@ def test_diagnose_uses_jwt_hospital_id(client):
     assert r.status_code == 200
     data = r.json()
     assert "session_id" in data
-    assert "onnx_top_candidates" in data
+
+    # Verify the stored session used the JWT hospital_id, not the injected one
+    from tests.conftest import TestingSessionLocal
+    from app.models.models import TriageSession
+    db = TestingSessionLocal()
+    session = db.query(TriageSession).filter(TriageSession.id == data["session_id"]).first()
+    db.close()
+    assert session is not None
+    assert session.hospital_id != "ATTACKER_HOSPITAL", (
+        "hospital_id injection succeeded — session stored attacker-supplied value"
+    )
+    # Patient belongs to HOSP_001, so that's what should be stored
+    assert session.hospital_id == "HOSP_001"
 
 
 def test_diagnose_returns_predictions(client):

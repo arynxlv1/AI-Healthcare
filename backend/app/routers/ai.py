@@ -61,9 +61,20 @@ async def diagnose(request_data: DiagnosisRequest, request: Request, db: Session
     if not user_id:
         raise HTTPException(status_code=401, detail="Authentication required")
 
-    # Security: ignore client-supplied hospital_id — use the one from the JWT
+    # Security: always use hospital_id from the JWT claim.
+    # Never fall back to the client-supplied value — a super_admin (who has no
+    # hospital_id in their JWT) should not be able to inject an arbitrary one.
     jwt_hospital_id = getattr(request.state, "hospital_id", None)
-    hospital_id = jwt_hospital_id or request_data.hospital_id
+    if not jwt_hospital_id:
+        # Decode directly in case middleware didn't set state (e.g. super_admin bypass)
+        auth = request.headers.get("Authorization", "")
+        if auth.startswith("Bearer "):
+            from ..services.auth_service import AuthService
+            payload = AuthService.decode_token(auth.split(" ", 1)[1])
+            if payload:
+                jwt_hospital_id = payload.get("hospital_id")
+    # super_admin has no hospital affiliation — use a sentinel value
+    hospital_id = jwt_hospital_id or "SYSTEM"
 
     # Stage 1: ONNX Classification
     symptom_vector = map_symptoms_to_vector(request_data.symptoms)

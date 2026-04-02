@@ -9,7 +9,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Copy app source
 COPY . .
 
-# Seed DB and start server
-CMD ["sh", "-c", "python -c 'import sys; sys.path.insert(0,\".\"); exec(open(\"../scripts/seed_db.py\").read())' 2>/dev/null || true && uvicorn app.main:app --host 0.0.0.0 --port 8000"]
+# Copy seed script so entrypoint can reach it at /app/scripts/seed_db.py
+COPY ../scripts /app/scripts
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
