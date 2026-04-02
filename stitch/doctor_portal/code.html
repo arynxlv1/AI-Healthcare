@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FedHealth AI - Triage Queue</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&amp;family=DM+Sans:wght@400;500;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=Newsreader:opsz,wght@6..72,400;6..72,700;6..72,800&amp;family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "on-secondary-fixed": "#072100",
+                        "on-background": "#1d1c17",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed-variant": "#215100",
+                        "surface-container-high": "#ec8e0",
+                        "primary": "#2e6c00",
+                        "inverse-primary": "#77de37",
+                        "on-surface": "#1d1c17",
+                        "secondary": "#486637",
+                        "surface-container": "#f2ede5",
+                        "inverse-surface": "#32302b",
+                        "background": "#fef9f1",
+                        "error": "#ba1a1a",
+                        "surface-tint": "#2e6c00",
+                        "on-primary-container": "#286100",
+                        "on-primary-fixed": "#092100",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#f5f0e8",
+                        "surface-dim": "#ded9d2",
+                        "secondary-container": "#c6eaaf",
+                        "surface": "#fef9f1",
+                        "surface-container-highest": "#e7e2da",
+                        "on-surface-variant": "#3f4a37",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed": "#390c00",
+                        "primary-fixed-dim": "#77de37",
+                        "on-secondary-fixed-variant": "#314e22",
+                        "on-tertiary-container": "#993106",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed-variant": "#832600",
+                        "surface-bright": "#fef9f1",
+                        "tertiary": "#a63b10",
+                        "tertiary-container": "#ffbaa4",
+                        "surface-variant": "#e7e2da",
+                        "primary-fixed": "#92fc52",
+                        "secondary-fixed": "#c9edb1",
+                        "outline-variant": "#bfcab2",
+                        "tertiary-fixed-dim": "#ffb59d",
+                        "tertiary-fixed": "#ffdbd0",
+                        "surface-container-low": "#f8f3eb",
+                        "on-secondary": "#ffffff",
+                        "primary-container": "#7ae23a",
+                        "on-primary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-container": "#4c6b3b",
+                        "outline": "#6f7b65",
+                        "secondary-fixed-dim": "#aed197",
+                        "parchment": "#F5F0E8",
+                        "cream": "#EDE7D9",
+                        "linen": "#D9D0BE",
+                        "charcoal": "#2A2A26",
+                        "acid": "#7AE23A",
+                        "ink": "#2A2A26",
+                        "sienna": "#a63b10",
+                        "fog": "#6f7b65"
+                    },
+                    fontFamily: {
+                        "headline": ["Playfair Display", "serif"],
+                        "body": ["DM Sans", "sans-serif"],
+                        "label": ["IBM Plex Mono", "monospace"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "9999px"
+                    }
+                },
+            },
+        }
+    </script>
+<style>.grain {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuBKM2axOCCWRo_vblBN4mQ3aVCbsH9qCY11uXcVXOigRua84zIw5dFlZqBJ_LTPNvXjtMeKrozkaaukY3yDkjkuADmFyqeOeVAFjqa-Rqw0y7FuPsyf56_76E6YJK_WgONrvV12r0OkrEVZaUVotP3YCXGWFGi7X5lINjpBc5adWsRMB6pwYP-J08NdgRIUW4R8UDFdn_g9TNYwCwfT7QwsglG7I7ik4VddAMQTYZmRVH0ArR0iKzGUt4v7uwkPG_80NB7A_KUR88Y-);
+    opacity: 0.03;
+    pointer-events: none
+    }
+.double-rule {
+    border-top: 1px solid #D9D0BE;
+    border-bottom: 1px solid #D9D0BE;
+    height: 4px;
+    margin: 2px 0
+    }
+.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+    font-size: 18px
+    }</style>
+</head>
+<body class="bg-parchment text-ink font-body selection:bg-acid selection:text-ink min-h-screen overflow-x-hidden">
+<div class="fixed inset-0 grain"></div>
+<!-- SideNavBar -->
+<aside class="fixed h-full w-[220px] left-0 top-0 border-r-0 rounded-none bg-[#2A2A26] flex flex-col py-6 z-50">
+<div class="px-6 mb-10">
+<h1 class="text-lg font-serif text-[#F5F0E8] tracking-tight uppercase">FedHealth AI</h1>
+<p class="font-label text-[10px] text-[#7AE23A] opacity-80 uppercase tracking-widest">Federated Intelligence</p>
+</div>
+<nav class="flex-grow space-y-1">
+<!-- Active: Triage Queue -->
+<a class="bg-[#363630] text-[#7AE23A] border-l-[3px] border-[#7AE23A] flex items-center h-[44px] px-4 font-label text-[10px] uppercase transition-colors duration-150" href="#">
+<span class="material-symbols-outlined mr-3">clinical_notes</span>
+                Triage Queue
+            </a>
+<a class="text-[#F5F0E8] flex items-center h-[44px] px-4 font-label text-[10px] uppercase opacity-70 hover:bg-[#363630] hover:text-[#7AE23A] transition-colors duration-150" href="#">
+<span class="material-symbols-outlined mr-3">folder_shared</span>
+                Patient Records
+            </a>
+<a class="text-[#F5F0E8] flex items-center h-[44px] px-4 font-label text-[10px] uppercase opacity-70 hover:bg-[#363630] hover:text-[#7AE23A] transition-colors duration-150" href="#">
+<span class="material-symbols-outlined mr-3">bar_chart</span>
+                Analytics
+            </a>
+<a class="text-[#F5F0E8] flex items-center h-[44px] px-4 font-label text-[10px] uppercase opacity-70 hover:bg-[#363630] hover:text-[#7AE23A] transition-colors duration-150" href="#">
+<span class="material-symbols-outlined mr-3">hub</span>
+                FL Monitoring
+            </a>
+<div class="mx-4 my-2 opacity-20 border-t border-[#D9D0BE]"></div>
+<a class="text-[#F5F0E8] flex items-center h-[44px] px-4 font-label text-[10px] uppercase opacity-70 hover:bg-[#363630] hover:text-[#7AE23A] transition-colors duration-150" href="#">
+<span class="material-symbols-outlined mr-3">corporate_fare</span>
+                Hospital Admin
+            </a>
+<a class="text-[#F5F0E8] flex items-center h-[44px] px-4 font-label text-[10px] uppercase opacity-70 hover:bg-[#363630] hover:text-[#7AE23A] transition-colors duration-150" href="#">
+<span class="material-symbols-outlined mr-3">settings_suggest</span>
+                System Console
+            </a>
+</nav>
+<footer class="mt-auto pt-6 border-t border-[#D9D0BE] border-opacity-10">
+<a class="text-[#F5F0E8] flex items-center h-[44px] px-4 font-label text-[10px] uppercase opacity-70 hover:bg-[#363630] hover:text-[#7AE23A] transition-colors duration-150" href="#">
+<span class="material-symbols-outlined mr-3">settings</span>
+                Settings
+            </a>
+<a class="text-[#F5F0E8] flex items-center h-[44px] px-4 font-label text-[10px] uppercase opacity-70 hover:bg-[#363630] hover:text-[#7AE23A] transition-colors duration-150" href="#">
+<span class="material-symbols-outlined mr-3">logout</span>
+                Log Out
+            </a>
+</footer>
+</aside>
+<!-- Main Canvas -->
+<main class="ml-[220px] min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-8 h-16 w-full bg-[#F5F0E8] border-b-2 border-[#D9D0BE] border-double sticky top-0 z-40">
+<div class="flex items-center space-x-4">
+<span class="text-xl font-bold font-serif text-[#2A2A26]">Triage Queue</span>
+</div>
+<div class="flex items-center space-x-6">
+<div class="relative flex items-center bg-cream px-3 py-1.5 border border-linen border-opacity-30">
+<span class="material-symbols-outlined text-fog text-sm mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-xs font-label uppercase tracking-tight w-48 placeholder:text-fog" placeholder="Search specimens..." type="text"/>
+</div>
+<div class="flex items-center space-x-3">
+<button class="material-symbols-outlined text-ink hover:text-acid transition-all">notifications</button>
+<button class="material-symbols-outlined text-ink hover:text-acid transition-all">account_circle</button>
+</div>
+</div>
+</header>
+<!-- Content Area -->
+<div class="p-8 max-w-6xl w-full mx-auto">
+<!-- Page Header -->
+<section class="mb-8 flex justify-between items-baseline">
+<div>
+<h2 class="font-headline text-[36px] text-ink leading-none">Triage Queue</h2>
+<p class="font-label text-sm text-fog mt-2 tracking-wide uppercase">24 pending cases requiring immediate review</p>
+</div>
+<div class="flex items-center gap-4">
+<div class="text-right">
+<p class="font-label text-[10px] text-fog uppercase">System Health</p>
+<p class="font-label text-xs text-acid font-bold uppercase tracking-widest">Optimized</p>
+</div>
+</div>
+</section>
+<!-- Filter Bar -->
+<div class="border-t border-b border-linen bg-parchment mb-12 flex items-center h-12">
+<div class="flex items-center h-full px-4 space-x-8">
+<button class="h-full px-2 text-ink font-label text-[11px] uppercase border-b-2 border-acid flex items-center tracking-widest">All Records</button>
+<button class="h-full px-2 text-fog font-label text-[11px] uppercase border-b-2 border-transparent hover:text-ink flex items-center transition-all tracking-widest">High Risk</button>
+<button class="h-full px-2 text-fog font-label text-[11px] uppercase border-b-2 border-transparent hover:text-ink flex items-center transition-all tracking-widest">Long Wait</button>
+<button class="h-full px-2 text-fog font-label text-[11px] uppercase border-b-2 border-transparent hover:text-ink flex items-center transition-all tracking-widest">Unassigned</button>
+</div>
+<div class="ml-auto px-4 flex items-center">
+<span class="material-symbols-outlined text-fog text-lg cursor-pointer hover:text-ink">tune</span>
+</div>
+</div>
+<!-- Case List -->
+<div class="space-y-0">
+<!-- ROW 1: Critical -->
+<div class="group">
+<div class="flex items-center py-6 border-b border-linen hover:bg-cream transition-colors">
+<div class="w-40 px-6">
+<span class="font-headline italic text-2xl text-tertiary">Critical</span>
+</div>
+<div class="h-10 w-[1px] bg-linen"></div>
+<div class="flex-grow px-8 grid grid-cols-12 gap-4 items-center">
+<div class="col-span-3">
+<p class="font-label text-[10px] text-fog uppercase mb-1">Specimen ID</p>
+<p class="font-label text-sm text-ink font-semibold">PX-2901-44</p>
+</div>
+<div class="col-span-4">
+<p class="font-label text-[10px] text-fog uppercase mb-1">Diagnosis</p>
+<p class="font-body font-bold text-[15px] text-ink leading-tight">Acute Respiratory Failure (Predicted)</p>
+</div>
+<div class="col-span-3 flex flex-wrap gap-1">
+<span class="bg-linen bg-opacity-20 border border-linen px-2 py-0.5 text-[9px] font-label uppercase text-ink">Dyspnea</span>
+<span class="bg-linen bg-opacity-20 border border-linen px-2 py-0.5 text-[9px] font-label uppercase text-ink">Hypoxia</span>
+<span class="bg-linen bg-opacity-20 border border-linen px-2 py-0.5 text-[9px] font-label uppercase text-ink">SpO2 88%</span>
+</div>
+<div class="col-span-2 text-right">
+<p class="font-label text-[10px] text-fog uppercase">Time In</p>
+<p class="font-label text-xs text-fog">12:04:18 PM</p>
+</div>
+</div>
+<div class="px-8 flex space-x-3">
+<button class="border border-ink px-4 py-2 font-label text-[11px] uppercase text-ink hover:bg-acid hover:text-on-secondary-fixed transition-all flex items-center">Confirm</button>
+<button class="border border-ink px-4 py-2 font-label text-[11px] uppercase text-ink hover:bg-tertiary hover:text-white transition-all flex items-center">Override</button>
+</div>
+</div>
+</div>
+<!-- ROW 2: Expansion Example -->
+<div class="group">
+<div class="flex items-center py-6 border-b border-linen bg-cream bg-opacity-30">
+<div class="w-40 px-6">
+<span class="font-headline italic text-2xl text-tertiary">Critical</span>
+</div>
+<div class="h-10 w-[1px] bg-linen"></div>
+<div class="flex-grow px-8 grid grid-cols-12 gap-4 items-center">
+<div class="col-span-3">
+<p class="font-label text-[10px] text-fog uppercase mb-1">Specimen ID</p>
+<p class="font-label text-sm text-ink font-semibold">PX-2905-12</p>
+</div>
+<div class="col-span-4">
+<p class="font-body font-bold text-[15px] text-ink leading-tight">Septic Shock Cascade</p>
+</div>
+<div class="col-span-3 flex flex-wrap gap-1">
+<span class="bg-linen bg-opacity-20 border border-linen px-2 py-0.5 text-[9px] font-label uppercase text-ink">Febrile</span>
+<span class="bg-linen bg-opacity-20 border border-linen px-2 py-0.5 text-[9px] font-label uppercase text-ink">Hypotensive</span>
+<span class="bg-linen bg-opacity-20 border border-linen px-2 py-0.5 text-[9px] font-label uppercase text-ink">Lactate High</span>
+</div>
+<div class="col-span-2 text-right">
+<p class="font-label text-xs text-fog">11:58:44 AM</p>
+</div>
+</div>
+<div class="px-8 flex space-x-3">
+<span class="material-symbols-outlined text-ink rotate-180">expand_more</span>
+</div>
+</div>
+<!-- Inline Expansion -->
+<div class="bg-cream border-l-4 border-tertiary ml-[20px] py-8 px-10 border-b border-linen shadow-inner">
+<div class="grid grid-cols-2 gap-12">
+<div>
+<h4 class="font-label text-[11px] uppercase text-fog mb-4 tracking-widest">AI Reasoning Engine</h4>
+<p class="font-body text-sm text-ink leading-relaxed mb-6">
+                                    Patient exhibits classical SIRS criteria with a federated confidence score of 94.2%. On-device sensors indicate a sharp 12% drop in MAP over last 15 minutes. Cross-node verification suggests correlation with PX-1102 (Site B) exhibiting similar genomic marker shifts.
+                                </p>
+<div class="space-y-4">
+<p class="font-label text-[10px] uppercase text-fog">Override Notes</p>
+<textarea class="w-full bg-parchment border border-linen p-3 text-sm font-body focus:ring-1 focus:ring-acid focus:border-acid min-h-[100px]" placeholder="Submit reasoning for override..."></textarea>
+</div>
+</div>
+<div>
+<h4 class="font-label text-[11px] uppercase text-fog mb-4 tracking-widest">ONNX Inference Probabilities</h4>
+<table class="w-full text-left font-label text-xs">
+<thead>
+<tr class="border-b border-linen border-opacity-50">
+<th class="pb-2 uppercase text-[10px] text-fog">Condition Class</th>
+<th class="pb-2 uppercase text-[10px] text-fog text-right">Probability</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-linen divide-opacity-30">
+<tr>
+<td class="py-2 text-ink">Septic Shock (Stage 2)</td>
+<td class="py-2 text-right font-bold text-tertiary">0.942</td>
+</tr>
+<tr>
+<td class="py-2 text-ink">Hypovolemic Event</td>
+<td class="py-2 text-right">0.041</td>
+</tr>
+<tr>
+<td class="py-2 text-ink">Cardiogenic Syncope</td>
+<td class="py-2 text-right">0.012</td>
+</tr>
+<tr>
+<td class="py-2 text-ink">Anaphylaxis Response</td>
+<td class="py-2 text-right">0.004</td>
+</tr>
+<tr>
+<td class="py-2 text-ink">Renal Insufficiency</td>
+<td class="py-2 text-right">0.001</td>
+</tr>
+</tbody>
+</table>
+<div class="mt-8 flex justify-end">
+<button class="bg-ink text-parchment px-8 py-3 font-label text-[11px] uppercase tracking-widest hover:bg-secondary transition-all">Submit Final Analysis</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ROW 3: High -->
+<div class="group">
+<div class="flex items-center py-6 border-b border-linen hover:bg-cream transition-colors">
+<div class="w-40 px-6">
+<span class="font-headline italic text-2xl text-ink">High</span>
+</div>
+<div class="h-10 w-[1px] bg-linen"></div>
+<div class="flex-grow px-8 grid grid-cols-12 gap-4 items-center">
+<div class="col-span-3">
+<p class="font-label text-[10px] text-fog uppercase mb-1">Specimen ID</p>
+<p class="font-label text-sm text-ink font-semibold">PX-3011-88</p>
+</div>
+<div class="col-span-4">
+<p class="font-body font-bold text-[15px] text-ink leading-tight">Hypertensive Urgency</p>
+</div>
+<div class="col-span-3 flex flex-wrap gap-1">
+<span class="bg-linen bg-opacity-20 border border-linen px-2 py-0.5 text-[9px] font-label uppercase text-ink">BP 190/115</span>
+<span class="bg-linen bg-opacity-20 border border-linen px-2 py-0.5 text-[9px] font-label uppercase text-ink">Cephalalgia</span>
+</div>
+<div class="col-span-2 text-right">
+<p class="font-label text-xs text-fog">11:42:10 AM</p>
+</div>
+</div>
+<div class="px-8 flex space-x-3">
+<button class="border border-ink px-4 py-2 font-label text-[11px] uppercase text-ink hover:bg-acid hover:text-on-secondary-fixed transition-all flex items-center">Confirm</button>
+<button class="border border-ink px-4 py-2 font-label text-[11px] uppercase text-ink hover:bg-tertiary hover:text-white transition-all flex items-center">Override</button>
+</div>
+</div>
+</div>
+<!-- ROW 4: Medium -->
+<div class="group">
+<div class="flex items-center py-6 border-b border-linen hover:bg-cream transition-colors">
+<div class="w-40 px-6">
+<span class="font-headline italic text-2xl text-ink opacity-60">Medium</span>
+</div>
+<div class="h-10 w-[1px] bg-linen"></div>
+<div class="flex-grow px-8 grid grid-cols-12 gap-4 items-center">
+<div class="col-span-3">
+<p class="font-label text-sm text-ink font-semibold opacity-70">PX-3044-21</p>
+</div>
+<div class="col-span-4">
+<p class="font-body font-bold text-[15px] text-ink leading-tight opacity-70">Localized Inflammation</p>
+</div>
+<div class="col-span-3 flex flex-wrap gap-1">
+<span class="bg-linen bg-opacity-20 border border-linen px-2 py-0.5 text-[9px] font-label uppercase text-ink opacity-70">Edema</span>
+</div>
+<div class="col-span-2 text-right">
+<p class="font-label text-xs text-fog">11:30:05 AM</p>
+</div>
+</div>
+<div class="px-8 flex space-x-3">
+<button class="border border-ink opacity-40 px-4 py-2 font-label text-[11px] uppercase text-ink hover:opacity-100 hover:bg-acid hover:text-on-secondary-fixed transition-all flex items-center">Confirm</button>
+<button class="border border-ink opacity-40 px-4 py-2 font-label text-[11px] uppercase text-ink hover:opacity-100 hover:bg-tertiary hover:text-white transition-all flex items-center">Override</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Stats -->
+<footer class="mt-16 border-t-2 border-linen border-double pt-8 grid grid-cols-4 gap-8">
+<div class="space-y-1">
+<p class="font-label text-[10px] text-fog uppercase">Avg Review Time</p>
+<p class="font-label text-xl text-ink font-bold">142s</p>
+</div>
+<div class="space-y-1">
+<p class="font-label text-[10px] text-fog uppercase">AI Concordance</p>
+<p class="font-label text-xl text-acid font-bold">98.4%</p>
+</div>
+<div class="space-y-1">
+<p class="font-label text-[10px] text-fog uppercase">Nodes Online</p>
+<p class="font-label text-xl text-ink font-bold">14/14</p>
+</div>
+<div class="space-y-1 text-right">
+<p class="font-label text-[10px] text-fog uppercase">Batch Status</p>
+<p class="font-label text-[11px] text-ink bg-linen px-2 inline-block">SIGNED 04:00Z</p>
+</div>
+</footer>
+</div>
+</main>
+<!-- Visual Artifacts -->
+<div class="fixed bottom-8 right-8 z-50">
+<button class="w-16 h-16 bg-ink text-acid shadow-[6px_6px_0px_#D9D0BE] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[3px_3px_0px_#D9D0BE] transition-all flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl">add_circle</span>
+</button>
+</div>
+</body></html>

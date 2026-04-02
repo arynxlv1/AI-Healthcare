@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;family=DM+Sans:wght@400;500;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=Newsreader:opsz,wght@6..72,400;6..72,700&amp;family=Inter:wght@400;500;700&amp;family=Space+Grotesk:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary-fixed": "#072100",
+              "on-background": "#1d1c17",
+              "error-container": "#ffdad6",
+              "on-primary-fixed-variant": "#215100",
+              "surface-container-high": "#ece8e0",
+              "primary": "#2e6c00",
+              "inverse-primary": "#77de37",
+              "on-surface": "#1d1c17",
+              "secondary": "#486637",
+              "surface-container": "#f2ede5",
+              "inverse-surface": "#32302b",
+              "background": "#fef9f1",
+              "error": "#ba1a1a",
+              "surface-tint": "#2e6c00",
+              "on-primary-container": "#286100",
+              "on-primary-fixed": "#092100",
+              "on-tertiary": "#ffffff",
+              "inverse-on-surface": "#f5f0e8",
+              "surface-dim": "#ded9d2",
+              "secondary-container": "#c6eaaf",
+              "surface": "#fef9f1",
+              "surface-container-highest": "#e7e2da",
+              "on-surface-variant": "#3f4a37",
+              "on-error-container": "#93000a",
+              "on-tertiary-fixed": "#390c00",
+              "primary-fixed-dim": "#77de37",
+              "on-secondary-fixed-variant": "#314e22",
+              "on-tertiary-container": "#993106",
+              "on-error": "#ffffff",
+              "on-tertiary-fixed-variant": "#832600",
+              "surface-bright": "#fef9f1",
+              "tertiary": "#a63b10",
+              "tertiary-container": "#ffbaa4",
+              "surface-variant": "#e7e2da",
+              "primary-fixed": "#92fc52",
+              "secondary-fixed": "#c9edb1",
+              "outline-variant": "#bfcab2",
+              "tertiary-fixed-dim": "#ffb59d",
+              "tertiary-fixed": "#ffdbd0",
+              "surface-container-low": "#f8f3eb",
+              "on-secondary": "#ffffff",
+              "primary-container": "#7ae23a",
+              "on-primary": "#ffffff",
+              "surface-container-lowest": "#ffffff",
+              "on-secondary-container": "#4c6b3b",
+              "outline": "#6f7b65",
+              "secondary-fixed-dim": "#aed197",
+              "parchment": "#F5F0E8",
+              "cream": "#EDE7D9",
+              "linen": "#D9D0BE",
+              "ink": "#2A2A26",
+              "acid": "#7AE23A",
+              "ochre": "#A63B10",
+              "fog": "#6f7b65"
+            },
+            fontFamily: {
+              "headline": ["Playfair Display", "serif"],
+              "body": ["DM Sans", "sans-serif"],
+              "label": ["IBM Plex Mono", "monospace"],
+              "mono": ["IBM Plex Mono", "monospace"]
+            },
+            borderRadius: {"DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>.grain-texture {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuCX6jnai74vHjSujZ1711s7AeSSGVjEYl2ZluSjrmARNilVdbJLYtpDj5OVRWvURcLHPPN_3-M25vNiGSzdabyUnFkitHmSrOWQdwam1qefnYpRq3FlEImIuXN_asIBgwRZhRPxQwBVhQBLoZ1crTXONRC5c8LRspcoynfzCH8Vjon84ABHsMHpRVLaC7jlOE7sIPEtzxBl0XLzlbNjKjU2yoXGrLKDtjJcmATFAtisldUxzZXgoUjdDymQGXQ2Phk65uVMYPvXslDb);
+    opacity: 0.03;
+    pointer-events: none
+    }
+.double-rule {
+    border-top: 1px solid #D9D0BE;
+    border-bottom: 1px solid #D9D0BE;
+    height: 4px;
+    margin: 8px 0
+    }
+.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+    }</style>
+</head>
+<body class="bg-parchment text-ink font-body selection:bg-acid selection:text-ink overflow-x-hidden">
+<div class="fixed inset-0 grain-texture z-50"></div>
+<!-- SideNavBar -->
+<aside class="fixed h-full w-[220px] left-0 top-0 border-r-0 rounded-none bg-[#2A2A26] flex flex-col py-6 z-40">
+<div class="px-6 mb-10">
+<h1 class="text-lg font-serif text-[#F5F0E8] tracking-tight">FedHealth AI</h1>
+<p class="font-mono text-[9px] uppercase tracking-widest text-[#7AE23A] opacity-80">Federated Intelligence</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="text-[#F5F0E8] flex items-center h-[44px] px-4 font-mono text-[10px] uppercase opacity-70 hover:bg-[#363630] hover:text-[#7AE23A] transition-colors duration-150" href="#">
+<span class="material-symbols-outlined mr-3 text-sm" data-icon="clinical_notes">clinical_notes</span>
+                Triage Queue
+            </a>
+<a class="text-[#F5F0E8] flex items-center h-[44px] px-4 font-mono text-[10px] uppercase opacity-70 hover:bg-[#363630] hover:text-[#7AE23A] transition-colors duration-150" href="#">
+<span class="material-symbols-outlined mr-3 text-sm" data-icon="folder_shared">folder_shared</span>
+                Patient Records
+            </a>
+<a class="text-[#F5F0E8] flex items-center h-[44px] px-4 font-mono text-[10px] uppercase opacity-70 hover:bg-[#363630] hover:text-[#7AE23A] transition-colors duration-150" href="#">
+<span class="material-symbols-outlined mr-3 text-sm" data-icon="bar_chart">bar_chart</span>
+                Analytics
+            </a>
+<a class="bg-[#363630] text-[#7AE23A] border-l-[3px] border-[#7AE23A] flex items-center h-[44px] px-4 font-mono text-[10px] uppercase transition-colors duration-150" href="#">
+<span class="material-symbols-outlined mr-3 text-sm" data-icon="hub" style="font-variation-settings: 'FILL' 1;">hub</span>
+                FL Monitoring
+            </a>
+<a class="text-[#F5F0E8] flex items-center h-[44px] px-4 font-mono text-[10px] uppercase opacity-70 hover:bg-[#363630] hover:text-[#7AE23A] transition-colors duration-150" href="#">
+<span class="material-symbols-outlined mr-3 text-sm" data-icon="corporate_fare">corporate_fare</span>
+                Hospital Admin
+            </a>
+<a class="text-[#F5F0E8] flex items-center h-[44px] px-4 font-mono text-[10px] uppercase opacity-70 hover:bg-[#363630] hover:text-[#7AE23A] transition-colors duration-150" href="#">
+<span class="material-symbols-outlined mr-3 text-sm" data-icon="settings_suggest">settings_suggest</span>
+                System Console
+            </a>
+</nav>
+<div class="mt-auto border-t border-[#363630] pt-4">
+<a class="text-[#F5F0E8] flex items-center h-[44px] px-4 font-mono text-[10px] uppercase opacity-70 hover:bg-[#363630] hover:text-[#7AE23A]" href="#">
+<span class="material-symbols-outlined mr-3 text-sm" data-icon="settings">settings</span>
+                Settings
+            </a>
+<a class="text-[#F5F0E8] flex items-center h-[44px] px-4 font-mono text-[10px] uppercase opacity-70 hover:bg-[#363630] hover:text-[#7AE23A]" href="#">
+<span class="material-symbols-outlined mr-3 text-sm" data-icon="logout">logout</span>
+                Log Out
+            </a>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="ml-[220px] min-h-screen pb-20">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-8 h-16 bg-parchment border-b-2 border-linen border-double sticky top-0 z-30">
+<div class="flex items-center space-x-4">
+<span class="text-xl font-bold font-serif text-ink tracking-tight">FedHealth AI</span>
+<span class="h-4 w-[1px] bg-linen"></span>
+<span class="font-mono text-[10px] uppercase tracking-widest text-ochre">Administrative Access</span>
+</div>
+<div class="flex items-center space-x-6">
+<div class="relative">
+<span class="material-symbols-outlined text-ink hover:text-acid cursor-pointer" data-icon="notifications">notifications</span>
+<span class="absolute -top-1 -right-1 w-2 h-2 bg-ochre rounded-full"></span>
+</div>
+<div class="flex items-center space-x-2 cursor-pointer group">
+<span class="font-mono text-[10px] text-ink uppercase group-hover:text-acid transition-colors">Admin_01</span>
+<span class="material-symbols-outlined text-ink group-hover:text-acid" data-icon="account_circle">account_circle</span>
+</div>
+</div>
+</header>
+<!-- Content Area -->
+<div class="p-8 max-w-7xl mx-auto space-y-12">
+<!-- Page Header -->
+<header class="flex flex-col md:flex-row md:items-end justify-between border-b-2 border-linen border-double pb-6 gap-4">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="text-acid font-mono text-xs uppercase font-bold tracking-tighter">Specimen-ID: FL-99-ALPHA</span>
+</div>
+<h2 class="text-5xl font-headline font-bold text-ink">
+                        Federated Learning<sup class="text-acid font-mono text-xl ml-1">β</sup>
+</h2>
+</div>
+<div class="text-right">
+<p class="font-mono text-[10px] text-fog uppercase">Last Aggregation Round</p>
+<p class="font-mono text-lg font-bold text-ink">2023.10.24 — 14:02 UTC</p>
+</div>
+</header>
+<!-- Top Stats -->
+<section class="grid grid-cols-1 md:grid-cols-4 gap-0">
+<div class="py-4 border-r border-linen pr-8">
+<p class="font-mono text-[11px] uppercase text-fog mb-2">Global Accuracy</p>
+<h3 class="text-4xl font-headline font-bold text-ink">94.8<span class="text-xl">%</span></h3>
+<div class="double-rule"></div>
+<p class="font-mono text-[9px] text-acid">+2.4% vs PRV_ITERATION</p>
+</div>
+<div class="py-4 border-r border-linen px-8">
+<p class="font-mono text-[11px] uppercase text-fog mb-2">Active Nodes</p>
+<h3 class="text-4xl font-headline font-bold text-ink">12/12</h3>
+<div class="double-rule"></div>
+<p class="font-mono text-[9px] text-ink">ALL SYSTEMS NOMINAL</p>
+</div>
+<div class="py-4 border-r border-linen px-8">
+<p class="font-mono text-[11px] uppercase text-fog mb-2">Model Convergence</p>
+<h3 class="text-4xl font-headline font-bold text-ink">0.0024</h3>
+<div class="double-rule"></div>
+<p class="font-mono text-[9px] text-ochre">APPROACHING THRESHOLD</p>
+</div>
+<div class="py-4 pl-8">
+<p class="font-mono text-[11px] uppercase text-fog mb-2">Total Data Volume</p>
+<h3 class="text-4xl font-headline font-bold text-ink">1.8 <span class="text-xl">PB</span></h3>
+<div class="double-rule"></div>
+<p class="font-mono text-[9px] text-ink">DISTRIBUTED ENCRYPTION</p>
+</div>
+</section>
+<!-- Grid Layout for Main Content -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Main Chart Area (Left) -->
+<div class="lg:col-span-8 space-y-8">
+<div class="bg-cream p-8 shadow-[3px_3px_0px_#D9D0BE] border-t-[3px] border-ochre">
+<div class="flex justify-between items-center mb-10">
+<h3 class="text-2xl font-headline font-bold text-ink">Training History</h3>
+<div class="flex items-center space-x-4">
+<div class="flex items-center space-x-2">
+<span class="w-3 h-3 border border-ink bg-ink"></span>
+<span class="font-mono text-[10px] uppercase">Accuracy</span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="w-3 h-3 border border-ochre bg-[#D2B48C]"></span> <!-- Rose-dust approximation -->
+<span class="font-mono text-[10px] uppercase">Loss</span>
+</div>
+</div>
+</div>
+<!-- Simulated Chart -->
+<div class="relative h-64 w-full border-l border-b border-linen">
+<!-- Grid lines -->
+<div class="absolute inset-0 grid grid-rows-4 grid-cols-6 pointer-events-none">
+<div class="border-t border-linen/30 border-dashed"></div><div class="border-t border-linen/30 border-dashed"></div><div class="border-t border-linen/30 border-dashed"></div><div class="border-t border-linen/30 border-dashed"></div><div class="border-t border-linen/30 border-dashed"></div><div class="border-t border-linen/30 border-dashed"></div>
+<div class="border-t border-linen/30 border-dashed"></div><div class="border-t border-linen/30 border-dashed"></div><div class="border-t border-linen/30 border-dashed"></div><div class="border-t border-linen/30 border-dashed"></div><div class="border-t border-linen/30 border-dashed"></div><div class="border-t border-linen/30 border-dashed"></div>
+<div class="border-t border-linen/30 border-dashed"></div><div class="border-t border-linen/30 border-dashed"></div><div class="border-t border-linen/30 border-dashed"></div><div class="border-t border-linen/30 border-dashed"></div><div class="border-t border-linen/30 border-dashed"></div><div class="border-t border-linen/30 border-dashed"></div>
+<div class="border-t border-linen/30 border-dashed"></div><div class="border-t border-linen/30 border-dashed"></div><div class="border-t border-linen/30 border-dashed"></div><div class="border-t border-linen/30 border-dashed"></div><div class="border-t border-linen/30 border-dashed"></div><div class="border-t border-linen/30 border-dashed"></div>
+</div>
+<!-- Polyline Accuracy (Mockup) -->
+<svg class="absolute inset-0 h-full w-full overflow-visible" preserveaspectratio="none">
+<path d="M0 200 L100 180 L200 150 L300 100 L400 80 L500 50 L600 30" fill="none" stroke="#2A2A26" stroke-width="2" vector-effect="non-scaling-stroke"></path>
+<!-- Points -->
+<rect fill="#2A2A26" height="4" width="4" x="98" y="178"></rect>
+<rect fill="#2A2A26" height="4" width="4" x="198" y="148"></rect>
+<rect fill="#2A2A26" height="4" width="4" x="298" y="98"></rect>
+<rect fill="#7AE23A" height="4" width="4" x="398" y="78"></rect> <!-- Acid point for highlight -->
+</svg>
+<!-- Polyline Loss (Mockup Rose Dust) -->
+<svg class="absolute inset-0 h-full w-full overflow-visible" preserveaspectratio="none">
+<path d="M0 50 L100 70 L200 120 L300 140 L400 180 L500 210 L600 230" fill="none" stroke="#A63B10" stroke-dasharray="4" stroke-width="1.5" vector-effect="non-scaling-stroke"></path>
+</svg>
+</div>
+<div class="flex justify-between mt-4 font-mono text-[9px] uppercase text-fog">
+<span>Round 001</span>
+<span>Round 014</span>
+<span>Round 028</span>
+<span>Round 042</span>
+<span>Current (056)</span>
+</div>
+</div>
+<!-- Privacy Budget Block -->
+<div class="bg-linen/10 border border-linen p-8 shadow-[3px_3px_0px_#D9D0BE]">
+<div class="flex items-center justify-between mb-4">
+<h4 class="font-mono text-xs uppercase font-bold text-ink">Differential Privacy Budget Consumption</h4>
+<span class="font-mono text-xs text-ochre">THRESHOLD: ε = 4.0</span>
+</div>
+<div class="flex items-baseline space-x-4 mb-6">
+<span class="font-mono text-[36px] font-bold text-ink leading-none">ε = 2.14</span>
+<span class="font-mono text-xs text-fog uppercase">Budget Spent</span>
+</div>
+<div class="relative w-full h-[10px]">
+<!-- Precise horizontal ruled bar -->
+<div class="absolute inset-0 border-t border-linen"></div>
+<div class="absolute inset-0 border-b border-linen"></div>
+<div class="absolute left-0 top-0 bottom-0 bg-acid" style="width: 53.5%;"></div>
+</div>
+<div class="mt-4 flex justify-between font-mono text-[9px] uppercase text-fog">
+<span>Start [0.0]</span>
+<span>Target Horizon [4.0]</span>
+</div>
+</div>
+</div>
+<!-- Right Sidebar Content -->
+<div class="lg:col-span-4 space-y-8">
+<!-- Trigger Card -->
+<div class="bg-parchment border border-ink p-8 flex flex-col items-center text-center shadow-[3px_3px_0px_#D9D0BE]">
+<span class="material-symbols-outlined text-4xl mb-4 text-ink" data-icon="rocket_launch">rocket_launch</span>
+<h3 class="text-2xl font-headline font-bold text-ink mb-2">Start New Round</h3>
+<p class="font-body text-sm text-fog leading-relaxed mb-8">
+                            Initiate decentralized model weight aggregation across all 12 institutional nodes. This process typically requires 14 minutes.
+                        </p>
+<button class="group w-full h-[48px] bg-ink text-parchment flex items-center justify-center space-x-3 hover:bg-[#363630] transition-colors relative overflow-hidden">
+<!-- Real-time status dot indicator -->
+<span class="relative flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-acid opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-acid"></span>
+</span>
+<span class="font-mono text-[12px] uppercase font-bold tracking-widest">Execute Aggregation</span>
+</button>
+</div>
+<!-- Live Log Feed -->
+<div class="bg-ink p-6 h-[400px] flex flex-col border border-linen">
+<div class="flex items-center justify-between mb-4 border-b border-[#363630] pb-2">
+<span class="font-mono text-[10px] text-[#F5F0E8] uppercase tracking-widest">System_Logs_v4.2</span>
+<span class="w-2 h-2 bg-acid rounded-full"></span>
+</div>
+<div class="flex-1 overflow-y-auto font-mono text-[11px] space-y-2 custom-scrollbar">
+<p class="text-[#F5F0E8] opacity-50">[14:02:11] INITIALIZING SECURE ENCLAVE...</p>
+<p class="text-acid">[14:02:15] NODE_07: AUTHENTICATED SUCCESSFULLY</p>
+<p class="text-acid">[14:02:16] NODE_12: AUTHENTICATED SUCCESSFULLY</p>
+<p class="text-ochre">[14:02:18] INFO: PARTIAL GRADIENT DECENT STARTING</p>
+<p class="text-[#F5F0E8]">[14:02:45] SYNC_ROUND_55_COMPLETE</p>
+<p class="text-[#F5F0E8] opacity-50">[14:03:01] BROADCASTING NEW GLOBAL WEIGHTS...</p>
+<p class="text-sienna text-[#ffdad6]">[14:03:05] WARN: LATENCY SPIKE IN LONDON_DATA_HUB</p>
+<p class="text-acid">[14:03:10] AGGREGATION PROTOCOL SIG_01 VERIFIED</p>
+<p class="text-[#F5F0E8] opacity-50">[14:03:15] IDLE_WAITING_FOR_TRIGGER</p>
+<p class="text-ochre">[14:04:00] INFO: PRIVACY_BUDGET_UPDATE: ε +0.02</p>
+<div class="animate-pulse inline-block w-2 h-4 bg-acid/50 ml-1"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Meta -->
+<footer class="mt-20 border-t border-linen pt-8 flex flex-col md:flex-row justify-between items-start gap-4">
+<div class="max-w-md">
+<h4 class="font-headline font-bold text-lg mb-2">Federated Security Protocols</h4>
+<p class="text-xs text-fog leading-relaxed">
+                        All hospital data remains on-premise. Only encrypted model updates are transmitted via the secure FedHealth relay. Compliant with HIPAA, GDPR-H, and IEEE 2807 Federated Learning standards.
+                    </p>
+</div>
+<div class="text-right">
+<img alt="Institutional Validation" class="h-6 grayscale opacity-30 mb-4 inline-block" data-alt="minimalist academic journal logo or clinical seal in high-contrast ink style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuClFcomQMJ8XO8-HgERqt2MH0s5B7WsNbjjyAb-NM_WU6l9oMmy0Ao1oq__5PFD_lj4muvqoxWfeQfwmuWEOexsHXlQoTICbcj_wpkJqTICQFxOcejXyeSdNhhMAq5JVS9CuMt-knK4KXD2XIV2EfX_LjbGaqOQhAfSMlku5ZPmk2TbSJUARpsWagjki62GmWtnW876Sxeau2bf_5m6cfyetlElwsw4J9uIBt9Ob_tmL7F5-RoHkldTXRPBdXZzI1NDAMrrOs175gvR"/>
+<div class="font-mono text-[10px] text-fog uppercase">
+                        System Signature: 8F22-99AB-0021-X9
+                    </div>
+</div>
+</footer>
+</div>
+</main>
+<style>
+        /* Custom scrollbar for the terminal feed */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #2A2A26;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #363630;
+        }
+    </style>
+</body></html>

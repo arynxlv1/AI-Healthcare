@@ -101,6 +101,7 @@ async def diagnose(request: Request, request_data: DiagnosisRequest, db: Session
         resource_type="TriageSession",
         resource_id=session.id,
         details={"pii_stripped": raw_query != clean_query},
+        db=db,
     )
 
     return {
@@ -134,7 +135,20 @@ async def get_patient_history(request: Request, db: Session = Depends(get_db)):
 
 
 @router.get("/diagnose/stream")
-async def diagnose_stream(session_id: str, db: Session = Depends(get_db)):
+async def diagnose_stream(session_id: str, request: Request, db: Session = Depends(get_db)):
+    # Defense-in-depth: verify the caller is authenticated even though RBAC middleware
+    # already enforces /api/ai. One misconfiguration shouldn't expose PHI.
+    user_id = getattr(request.state, "user_id", None)
+    if not user_id:
+        auth = request.headers.get("Authorization", "")
+        if auth.startswith("Bearer "):
+            from ..services.auth_service import AuthService
+            payload = AuthService.decode_token(auth.split(" ", 1)[1])
+            if payload:
+                user_id = payload.get("sub")
+    if not user_id:
+        raise HTTPException(status_code=401, detail="Authentication required")
+
     session = db.query(TriageSession).filter(TriageSession.id == session_id).first()
     if not session:
         raise HTTPException(status_code=404, detail="Session not found")
@@ -176,6 +190,9 @@ async def diagnose_stream(session_id: str, db: Session = Depends(get_db)):
 @router.post("/chat")
 async def nurse_chat(chat_req: ChatRequest, request: Request):
     """Free-form AI nurse chatbot — streams tokens from Ollama."""
+    user_id = getattr(request.state, "user_id", None)
+    if not user_id:
+        raise HTTPException(status_code=401, detail="Authentication required")
     user_message = strip_pii(chat_req.message)
 
     async def stream():
@@ -195,6 +212,8 @@ class DiagnosticChatRequest(BaseModel):
 @router.post("/diagnostic-chat")
 async def diagnostic_chat(req: DiagnosticChatRequest, request: Request):
     """MCQ diagnostic interview — streams the next question or final diagnosis."""
+    if not getattr(request.state, "user_id", None):
+        raise HTTPException(status_code=401, detail="Authentication required")
     async def stream():
         async for chunk in llm_service.stream_diagnostic(
             history=[(m.role, m.content) for m in req.history],

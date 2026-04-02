@@ -68,7 +68,8 @@ async def confirm_case(case_id: str, request: Request, db: Session = Depends(get
         action="CONFIRM_TRIAGE",
         resource_type="TriageSession",
         resource_id=case_id,
-        details={"status": "confirmed"}
+        details={"status": "confirmed"},
+        db=db,
     )
     
     return {"message": f"Case {case_id} confirmed by doctor"}
@@ -97,7 +98,8 @@ async def override_case(case_id: str, note: str, request: Request, db: Session =
         action="OVERRIDE_TRIAGE",
         resource_type="TriageSession",
         resource_id=case_id,
-        details={"status": "overridden", "notes": note}
+        details={"status": "overridden", "notes": note},
+        db=db,
     )
     
     return {"message": f"Case {case_id} overridden with note: {note}"}

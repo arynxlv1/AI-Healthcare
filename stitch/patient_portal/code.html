@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FedHealth AI - Patient Portal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&amp;family=DM+Sans:wght@400;500;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=Newsreader:opsz,wght@6-72,400;6-72,700&amp;family=Inter:wght@400;500;700&amp;family=Space+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-secondary-fixed": "#072100",
+                        "on-background": "#1d1c17",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed-variant": "#215100",
+                        "surface-container-high": "#ece8e0",
+                        "primary": "#2e6c00",
+                        "inverse-primary": "#77de37",
+                        "on-surface": "#1d1c17",
+                        "secondary": "#486637",
+                        "surface-container": "#f2ede5",
+                        "inverse-surface": "#32302b",
+                        "background": "#fef9f1",
+                        "error": "#ba1a1a",
+                        "surface-tint": "#2e6c00",
+                        "on-primary-container": "#286100",
+                        "on-primary-fixed": "#092100",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#f5f0e8",
+                        "surface-dim": "#ded9d2",
+                        "secondary-container": "#c6eaaf",
+                        "surface": "#fef9f1",
+                        "surface-container-highest": "#e7e2da",
+                        "on-surface-variant": "#3f4a37",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed": "#390c00",
+                        "primary-fixed-dim": "#77de37",
+                        "on-secondary-fixed-variant": "#314e22",
+                        "on-tertiary-container": "#993106",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed-variant": "#832600",
+                        "surface-bright": "#fef9f1",
+                        "tertiary": "#a63b10",
+                        "tertiary-container": "#ffbaa4",
+                        "surface-variant": "#e7e2da",
+                        "primary-fixed": "#92fc52",
+                        "secondary-fixed": "#c9edb1",
+                        "outline-variant": "#bfcab2",
+                        "tertiary-fixed-dim": "#ffb59d",
+                        "tertiary-fixed": "#ffdbd0",
+                        "surface-container-low": "#f8f3eb",
+                        "on-secondary": "#ffffff",
+                        "primary-container": "#7ae23a",
+                        "on-primary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-container": "#4c6b3b",
+                        "outline": "#6f7b65",
+                        "secondary-fixed-dim": "#aed197",
+                        "parchment": "#F5F0E8",
+                        "ink": "#2A2A26",
+                        "acid": "#7AE23A",
+                        "linen": "#D9D0BE",
+                        "cream": "#EDE7D9"
+                    },
+                    fontFamily: {
+                        "headline": ["Playfair Display", "serif"],
+                        "body": ["DM Sans", "sans-serif"],
+                        "label": ["IBM Plex Mono", "monospace"],
+                        "mono": ["IBM Plex Mono", "monospace"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>.grain {
+    position: relative
+    }
+.grain::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuDEhGQsEKoneFp2RrAWgE23fJa2RD-HJ7iINQxn96qd4Z-xwF04LU5n_-TDJAfC3QjSxesH3eQLnMDIsOpZaNHqlZhYEOohM6D5f_ec4Wc80RNCIvgIxxFDCplmL6_EdgQt8ysz2FuoEid6Vajkhcy01WeBoXRnfHvdA4AYA4KZcjmTp_qHaE0KNSgUkKcpJtK0QNDXFuZS-28lx2xa2YLCsLcYrzGeSrN1X3btTLWeWgNyn4aKWSvUeGKZfySwOU750fHXfHQ-MvLX);
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 10
+    }
+.double-rule {
+    border-top: 1px solid #D9D0BE;
+    padding-top: 2px;
+    border-bottom: 1px solid #D9D0BE;
+    height: 4px;
+    width: 100%;
+    margin: 1.5rem 0
+    }
+.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+    }
+.hard-offset {
+    box-shadow: 3px 3px 0 #D9D0BE
+    }
+.btn-press:active {
+    box-shadow: 1px 1px 0 #D9D0BE;
+    transform: translate(2px, 2px)
+    }</style>
+</head>
+<body class="bg-parchment text-ink font-body selection:bg-acid selection:text-ink grain min-h-screen">
+<!-- Sidebar (Shared Component) -->
+<aside class="fixed h-full w-[220px] left-0 top-0 border-r-0 bg-ink z-20 flex flex-col py-6">
+<div class="px-6 mb-10">
+<h1 class="text-lg font-headline text-parchment tracking-tight">FedHealth AI</h1>
+<p class="font-label text-[10px] uppercase text-acid tracking-widest opacity-80">Federated Intelligence</p>
+</div>
+<nav class="flex-1 flex flex-col space-y-1">
+<a class="text-parchment flex items-center h-[44px] px-4 font-mono text-[10px] uppercase opacity-70 hover:bg-[#363630] hover:text-[#7AE23A] transition-colors duration-150" href="#">
+<span class="material-symbols-outlined mr-3 text-sm">clinical_notes</span>
+                Triage Queue
+            </a>
+<a class="bg-[#363630] text-[#7AE23A] border-l-[3px] border-[#7AE23A] flex items-center h-[44px] px-4 font-mono text-[10px] uppercase" href="#">
+<span class="material-symbols-outlined mr-3 text-sm">folder_shared</span>
+                Health Portal
+            </a>
+<a class="text-parchment flex items-center h-[44px] px-4 font-mono text-[10px] uppercase opacity-70 hover:bg-[#363630] hover:text-[#7AE23A] transition-colors duration-150" href="#">
+<span class="material-symbols-outlined mr-3 text-sm">bar_chart</span>
+                Analytics
+            </a>
+<a class="text-parchment flex items-center h-[44px] px-4 font-mono text-[10px] uppercase opacity-70 hover:bg-[#363630] hover:text-[#7AE23A] transition-colors duration-150" href="#">
+<span class="material-symbols-outlined mr-3 text-sm">hub</span>
+                FL Monitoring
+            </a>
+<a class="text-parchment flex items-center h-[44px] px-4 font-mono text-[10px] uppercase opacity-70 hover:bg-[#363630] hover:text-[#7AE23A] transition-colors duration-150" href="#">
+<span class="material-symbols-outlined mr-3 text-sm">corporate_fare</span>
+                Hospital Admin
+            </a>
+<a class="text-parchment flex items-center h-[44px] px-4 font-mono text-[10px] uppercase opacity-70 hover:bg-[#363630] hover:text-[#7AE23A] transition-colors duration-150" href="#">
+<span class="material-symbols-outlined mr-3 text-sm">settings_suggest</span>
+                System Console
+            </a>
+</nav>
+<div class="mt-auto flex flex-col border-t border-white/10 pt-4">
+<a class="text-parchment flex items-center h-[44px] px-4 font-mono text-[10px] uppercase opacity-70 hover:text-acid transition-colors" href="#">
+<span class="material-symbols-outlined mr-3 text-sm">settings</span>
+                Settings
+            </a>
+<a class="text-parchment flex items-center h-[44px] px-4 font-mono text-[10px] uppercase opacity-70 hover:text-acid transition-colors" href="#">
+<span class="material-symbols-outlined mr-3 text-sm">logout</span>
+                Log Out
+            </a>
+</div>
+</aside>
+<!-- Top Bar (Shared Component) -->
+<header class="fixed top-0 h-16 ml-[220px] w-[calc(100%-220px)] bg-parchment flex justify-between items-center px-8 border-b-2 border-linen border-double z-10">
+<div class="flex items-center space-x-4">
+<span class="text-xl font-bold font-headline text-ink">FedHealth AI</span>
+</div>
+<div class="flex items-center space-x-6">
+<div class="relative">
+<span class="material-symbols-outlined text-ink absolute left-3 top-1/2 -translate-y-1/2 text-sm">search</span>
+<input class="bg-cream border-none focus:ring-1 focus:ring-acid pl-10 pr-4 py-1 text-xs font-mono uppercase w-64" placeholder="Patient ID or Lab Ref..." type="text"/>
+</div>
+<div class="flex items-center space-x-3">
+<span class="material-symbols-outlined text-ink cursor-pointer hover:text-acid">notifications</span>
+<div class="h-8 w-8 bg-ink text-parchment flex items-center justify-center font-mono text-xs cursor-pointer">ID</div>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-[220px] pt-16 min-h-screen">
+<div class="max-w-7xl mx-auto p-12">
+<!-- Page Header -->
+<div class="mb-12">
+<h2 class="text-[36px] font-headline text-ink leading-tight">Health Portal</h2>
+<p class="text-[14px] font-body text-outline mt-1 italic">Welcome back, Arthur Thorne</p>
+<div class="h-[3px] bg-acid w-20 mt-4"></div>
+</div>
+<!-- Two Column Layout (55/45) -->
+<div class="flex flex-col lg:flex-row gap-12">
+<!-- LEFT: Symptom Selector (55%) -->
+<section class="lg:w-[55%]">
+<div class="bg-cream p-8 hard-offset border-t-[3px] border-acid relative grain">
+<header class="mb-6 flex justify-between items-end">
+<div>
+<h3 class="font-headline text-xl">Symptom Inventory</h3>
+<p class="font-label text-[10px] uppercase text-outline mt-1">Batch ID: #882-BIO-PX</p>
+</div>
+<span class="font-label text-[10px] text-acid bg-ink px-2 py-1">ENCRYPTED INPUT</span>
+</header>
+<div class="space-y-8">
+<!-- Group 1 -->
+<div>
+<label class="font-label text-[11px] uppercase tracking-wider mb-3 block text-outline">Respiratory &amp; Chest</label>
+<div class="flex flex-wrap gap-2">
+<span class="h-[28px] px-4 flex items-center bg-cream border border-linen font-body text-[12px] cursor-pointer hover:bg-linen/20 transition-all">Dry Cough</span>
+<span class="h-[28px] px-4 flex items-center bg-ink text-parchment font-body text-[12px] cursor-pointer relative pr-8">
+                                        Shortness of Breath
+                                        <span class="absolute right-3 top-1/2 -translate-y-1/2 w-1 h-1 bg-acid rounded-full"></span>
+</span>
+<span class="h-[28px] px-4 flex items-center bg-cream border border-linen font-body text-[12px] cursor-pointer hover:bg-linen/20 transition-all">Chest Pressure</span>
+<span class="h-[28px] px-4 flex items-center bg-cream border border-linen font-body text-[12px] cursor-pointer hover:bg-linen/20 transition-all">Wheezing</span>
+</div>
+</div>
+<!-- Group 2 -->
+<div>
+<label class="font-label text-[11px] uppercase tracking-wider mb-3 block text-outline">Neurological</label>
+<div class="flex flex-wrap gap-2">
+<span class="h-[28px] px-4 flex items-center bg-ink text-parchment font-body text-[12px] cursor-pointer relative pr-8">
+                                        Acute Vertigo
+                                        <span class="absolute right-3 top-1/2 -translate-y-1/2 w-1 h-1 bg-acid rounded-full"></span>
+</span>
+<span class="h-[28px] px-4 flex items-center bg-cream border border-linen font-body text-[12px] cursor-pointer hover:bg-linen/20 transition-all">Visual Auras</span>
+<span class="h-[28px] px-4 flex items-center bg-cream border border-linen font-body text-[12px] cursor-pointer hover:bg-linen/20 transition-all">Limb Numbness</span>
+<span class="h-[28px] px-4 flex items-center bg-cream border border-linen font-body text-[12px] cursor-pointer hover:bg-linen/20 transition-all">Migraine Cluster</span>
+</div>
+</div>
+<!-- Group 3 -->
+<div>
+<label class="font-label text-[11px] uppercase tracking-wider mb-3 block text-outline">General Systemic</label>
+<div class="flex flex-wrap gap-2">
+<span class="h-[28px] px-4 flex items-center bg-cream border border-linen font-body text-[12px] cursor-pointer hover:bg-linen/20 transition-all">Fever (38°C+)</span>
+<span class="h-[28px] px-4 flex items-center bg-ink text-parchment font-body text-[12px] cursor-pointer relative pr-8">
+                                        Fatigue
+                                        <span class="absolute right-3 top-1/2 -translate-y-1/2 w-1 h-1 bg-acid rounded-full"></span>
+</span>
+<span class="h-[28px] px-4 flex items-center bg-cream border border-linen font-body text-[12px] cursor-pointer hover:bg-linen/20 transition-all">Joint Pain</span>
+<span class="h-[28px] px-4 flex items-center bg-cream border border-linen font-body text-[12px] cursor-pointer hover:bg-linen/20 transition-all">Night Sweats</span>
+</div>
+</div>
+</div>
+<div class="mt-12 flex justify-end">
+<button class="bg-ink text-parchment px-8 py-4 flex items-center space-x-4 btn-press transition-all group">
+<span class="font-label uppercase text-sm tracking-widest">Execute AI Analysis</span>
+<span class="w-2 h-2 bg-acid rounded-full shadow-[0_0_8px_#7AE23A] animate-pulse"></span>
+</button>
+</div>
+</div>
+<div class="mt-8 bg-linen/10 p-6 flex items-start space-x-4 border-l-4 border-acid">
+<span class="material-symbols-outlined text-ink">verified_user</span>
+<div>
+<p class="font-label text-[10px] uppercase text-outline">Federated Privacy Guard</p>
+<p class="text-xs mt-1 text-ink opacity-80 leading-relaxed">Your raw medical data never leaves this device. Only secure cryptographic gradients are transmitted to the FedHealth global model for inference.</p>
+</div>
+</div>
+</section>
+<!-- RIGHT: Results Area (45%) -->
+<section class="lg:w-[45%] flex flex-col space-y-8">
+<!-- INITIAL EMPTY STATE (Hidden if results active) -->
+<!-- Note: For the design mockup, we will display the results state as per prompt requirements "After analysis" -->
+<!-- Diagnosis Card -->
+<div class="bg-cream hard-offset border-t-[3px] border-tertiary relative overflow-hidden grain">
+<div class="p-8">
+<div class="flex justify-between items-start mb-6">
+<div>
+<p class="font-label text-[10px] uppercase text-outline mb-1">Primary Match Found</p>
+<h3 class="font-headline text-[24px]">BPPV: Positional Vertigo</h3>
+</div>
+<div class="bg-ink px-3 py-1">
+<span class="font-label text-[10px] text-tertiary uppercase font-bold">MODERATE RISK</span>
+</div>
+</div>
+<div class="flex items-baseline space-x-4 mb-8">
+<span class="font-mono text-[48px] text-tertiary font-bold tracking-tighter">84.2<span class="text-2xl">%</span></span>
+<span class="font-label text-[11px] uppercase text-outline">Confidence Interval</span>
+</div>
+<div class="double-rule"></div>
+<h4 class="font-label text-[10px] uppercase text-outline mb-4">Differential Diagnosis (Alt)</h4>
+<ul class="space-y-3 font-body text-sm">
+<li class="flex justify-between items-center border-b border-linen pb-2">
+<span>Vestibular Neuritis</span>
+<span class="font-mono text-xs">12.1%</span>
+</li>
+<li class="flex justify-between items-center border-b border-linen pb-2">
+<span>Meniere's Disease</span>
+<span class="font-mono text-xs">2.4%</span>
+</li>
+<li class="flex justify-between items-center border-b border-linen pb-2">
+<span>Labyrinthitis</span>
+<span class="font-mono text-xs">0.8%</span>
+</li>
+<li class="flex justify-between items-center border-b border-linen pb-2">
+<span>Orthostatic Hypotension</span>
+<span class="font-mono text-xs">0.4%</span>
+</li>
+<li class="flex justify-between items-center">
+<span>Migraine-associated Vertigo</span>
+<span class="font-mono text-xs">0.1%</span>
+</li>
+</ul>
+</div>
+</div>
+<!-- Immediate Steps Card -->
+<div class="bg-cream hard-offset border-t-[3px] border-primary relative grain">
+<div class="p-8">
+<header class="mb-6">
+<h3 class="font-headline text-lg">Recommended Interventions</h3>
+<p class="font-label text-[10px] uppercase text-outline mt-1">Status: Immediate Action Required</p>
+</header>
+<ol class="space-y-6">
+<li class="flex space-x-6">
+<span class="font-headline italic text-2xl text-linen leading-none">01</span>
+<p class="text-sm leading-relaxed"><span class="font-bold">Epley Maneuver:</span> Perform three cycles to reposition displaced canaliths in the inner ear.</p>
+</li>
+<li class="flex space-x-6">
+<span class="font-headline italic text-2xl text-linen leading-none">02</span>
+<p class="text-sm leading-relaxed"><span class="font-bold">Hydration Check:</span> Increase electrolyte intake; maintain 2.5L fluid volume.</p>
+</li>
+<li class="flex space-x-6">
+<span class="font-headline italic text-2xl text-linen leading-none">03</span>
+<p class="text-sm leading-relaxed"><span class="font-bold">Activity Restriction:</span> Avoid rapid head movements and heavy lifting for 24 hours.</p>
+</li>
+</ol>
+</div>
+</div>
+<!-- Nurse AI Chat Trigger (Panel is below) -->
+<div class="bg-ink p-8 flex items-center justify-between cursor-pointer group hover:bg-[#363630] transition-all">
+<div>
+<h3 class="text-parchment font-headline text-lg">Consult Nurse AI</h3>
+<p class="text-acid font-label text-[10px] uppercase mt-1">Live Clinical Agent Available</p>
+</div>
+<span class="material-symbols-outlined text-parchment group-hover:translate-x-2 transition-transform">keyboard_arrow_right</span>
+</div>
+</section>
+</div>
+<!-- Nurse AI Chat Slide-Down (Charcoal Background) -->
+<div class="mt-12 bg-ink hard-offset border-t-2 border-acid/30 overflow-hidden grain">
+<header class="bg-black/20 p-4 px-8 border-b border-white/5 flex justify-between items-center">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 bg-acid/20 border border-acid/50 flex items-center justify-center">
+<span class="material-symbols-outlined text-acid text-lg">support_agent</span>
+</div>
+<span class="font-label text-[10px] uppercase text-parchment tracking-widest">Clinical AI Assistant</span>
+</div>
+<span class="w-2 h-2 bg-acid rounded-full"></span>
+</header>
+<div class="p-8 space-y-6 max-h-[500px] overflow-y-auto">
+<!-- AI Bubble -->
+<div class="flex items-start space-x-4 max-w-[80%]">
+<div class="w-10 h-10 bg-[#363630] flex-shrink-0 flex items-center justify-center border-b-[1px] border-acid">
+<span class="material-symbols-outlined text-acid text-lg">biotech</span>
+</div>
+<div class="bg-transparent text-parchment p-4 border border-white/10 relative">
+<p class="text-sm leading-relaxed">Based on your report of acute vertigo and shortness of breath, I have prioritized BPPV as the primary matching pathology. Would you like a step-by-step video guide for the Epley maneuver?</p>
+</div>
+</div>
+<!-- User Bubble -->
+<div class="flex items-start space-x-4 max-w-[80%] ml-auto justify-end">
+<div class="bg-cream text-ink p-4 hard-offset relative">
+<p class="text-sm leading-relaxed">Yes, and how long should I expect the dizziness to last after the maneuver?</p>
+</div>
+<div class="w-10 h-10 bg-linen flex-shrink-0 flex items-center justify-center font-mono text-xs text-ink">
+                            AT
+                        </div>
+</div>
+<!-- AI Bubble -->
+<div class="flex items-start space-x-4 max-w-[80%]">
+<div class="w-10 h-10 bg-[#363630] flex-shrink-0 flex items-center justify-center border-b-[1px] border-acid">
+<span class="material-symbols-outlined text-acid text-lg">biotech</span>
+</div>
+<div class="bg-transparent text-parchment p-4 border border-white/10 relative">
+<p class="text-sm leading-relaxed">Most patients experience relief within 2-3 hours of a successful maneuver, though residual "lightheadedness" can persist for up to 48 hours. I've sent a detailed protocol to your Health Portal docs.</p>
+</div>
+</div>
+</div>
+<div class="p-6 bg-black/20 border-t border-white/5">
+<div class="relative">
+<input class="w-full bg-transparent border-b border-white/20 focus:border-acid text-parchment font-body px-0 py-3 focus:ring-0" placeholder="Type your clinical question..." type="text"/>
+<button class="absolute right-0 top-1/2 -translate-y-1/2 text-acid font-label text-[10px] uppercase tracking-widest hover:text-white transition-colors">Send Command</button>
+</div>
+</div>
+</div>
+<!-- Footer / Technical Meta -->
+<footer class="mt-24 pt-8 border-t border-linen flex justify-between items-center text-outline">
+<div class="flex space-x-12">
+<div>
+<p class="font-label text-[9px] uppercase">Node Identity</p>
+<p class="font-mono text-[10px]">PX-ALPHA-7729-UK</p>
+</div>
+<div>
+<p class="font-label text-[9px] uppercase">Model Version</p>
+<p class="font-mono text-[10px]">BioBERT-v4.2.1-clinical</p>
+</div>
+</div>
+<div class="flex space-x-4">
+<img alt="Bio-Cert Logo" class="h-8 opacity-50 grayscale" data-alt="minimalist scientific logo of a stylized DNA helix with circuitry elements clean ink on parchment style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgdKkXaJgL1GKZ-WzYypp59sXfK5l13nl2_upxcqz7xvSIjty1Wv4XVOcl3pXalM8hUEwTjbGjJ5SS0H06LBFSAZBKvz-91uTjXh13W4Eg6ErWivFPgUDTbpqk4YfgA697dsZ8IELHXIyZo0VW7vsDej2d2ImEZoZ078UU2ZlZ2Y3AVWjR3peegENlLaOb9vhu_n_VUW6elHgnMaQU-Fi5ervYTnIjgPhKO_JY9NZBPXUp5Uzz8WefAUIVVJm0QHaE1MA6JeS0W17t"/>
+</div>
+</footer>
+</div>
+</main>
+<!-- Initial state decorative element (visual only, context provided in prompt) -->
+<div class="fixed bottom-12 right-12 opacity-10 pointer-events-none">
+<div class="w-60 h-60 border-2 border-linen rounded-full flex items-center justify-center p-8 text-center">
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-4xl mb-4">stethoscope</span>
+<p class="font-headline italic text-lg leading-tight">Select your symptoms to begin analysis.</p>
+</div>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FedHealth AI | Clinical Intelligence Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&amp;family=DM+Sans:wght@400;500;700&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=Newsreader:opsz,wght@6-72,400;700&amp;family=Inter:wght@400;500;700&amp;family=Space+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "parchment": "#F5F0E8",
+              "cream": "#EDE7D9",
+              "linen": "#D9D0BE",
+              "ink": "#2A2A26",
+              "acid": "#7AE23A",
+              "moss": "#314E22",
+              "sienna": "#BA1A1A",
+              "fog": "#6F7B65",
+              "on-secondary-fixed": "#072100",
+              "on-background": "#1d1c17",
+              "error-container": "#ffdad6",
+              "on-primary-fixed-variant": "#215100",
+              "surface-container-high": "#ece8e0",
+              "primary": "#2e6c00",
+              "inverse-primary": "#77de37",
+              "on-surface": "#1d1c17",
+              "secondary": "#486637",
+              "surface-container": "#f2ede5",
+              "inverse-surface": "#32302b",
+              "background": "#fef9f1",
+              "error": "#ba1a1a",
+              "surface-tint": "#2e6c00",
+              "on-primary-container": "#286100",
+              "on-primary-fixed": "#092100",
+              "on-tertiary": "#ffffff",
+              "inverse-on-surface": "#f5f0e8",
+              "surface-dim": "#ded9d2",
+              "secondary-container": "#c6eaaf",
+              "surface": "#fef9f1",
+              "surface-container-highest": "#e7e2da",
+              "on-surface-variant": "#3f4a37",
+              "on-error-container": "#93000a",
+              "on-tertiary-fixed": "#390c00",
+              "primary-fixed-dim": "#77de37",
+              "on-secondary-fixed-variant": "#314e22",
+              "on-tertiary-container": "#993106",
+              "on-error": "#ffffff",
+              "on-tertiary-fixed-variant": "#832600",
+              "surface-bright": "#fef9f1",
+              "tertiary": "#a63b10",
+              "tertiary-container": "#ffbaa4",
+              "surface-variant": "#e7e2da",
+              "primary-fixed": "#92fc52",
+              "secondary-fixed": "#c9edb1",
+              "outline-variant": "#bfcab2",
+              "tertiary-fixed-dim": "#ffb59d",
+              "tertiary-fixed": "#ffdbd0",
+              "surface-container-low": "#f8f3eb",
+              "on-secondary": "#ffffff",
+              "primary-container": "#7ae23a",
+              "on-primary": "#ffffff",
+              "surface-container-lowest": "#ffffff",
+              "on-secondary-container": "#4c6b3b",
+              "outline": "#6f7b65",
+              "secondary-fixed-dim": "#aed197"
+            },
+            fontFamily: {
+              "headline": ["Playfair Display", "serif"],
+              "body": ["DM Sans", "sans-serif"],
+              "label": ["IBM Plex Mono", "monospace"],
+              "serif": ["Newsreader", "serif"],
+              "sans": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"none": "0px", "DEFAULT": "0.25rem"}
+          },
+        },
+      }
+    </script>
+<style>.grain-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuBcgXmFZDVN7EUXSlAG5H9ReKthe2klx2CDLGN8y2aFdZDGzHy6VmxhiWZ5pmV6tQlEWhe8978EV4jtZV1zUjR2lT9iCW3mIWooSHwnnJtlI7r7ZVLuwbSaRhkSuuAI7FAXTWQfu1JF71SgGHtnsWQJnwZqD0htPfH--J9WLXeKmvae68lABzcQtjuiBsuks5KW_KzNtAFrYEMQlp7-S90EQSlKyIc-1pQkgy69cslRF8ZBmElEv1YxDBWwfMGPxvSjAqzPW29KOCO9);
+    opacity: 0.03;
+    z-index: 50
+    }
+.double-rule {
+    border-top: 1px solid #D9D0BE;
+    border-bottom: 1px solid #D9D0BE;
+    height: 4px;
+    width: 100%;
+    margin: 1rem 0
+    }
+.registration-focus:focus {
+    outline: 2px solid #7AE23A;
+    outline-offset: 2px
+    }
+.scanning-line {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    width: 40px;
+    background-color: #7AE23A;
+    box-shadow: 0 0 8px #7AE23A
+    }
+.hard-shadow {
+    box-shadow: 4px 4px 0 #D9D0BE
+    }
+.botanical-bg {
+    background-image: url("data:image/svg+xml,%3Csvg width='600' height='800' viewBox='0 0 600 800' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M300 800C300 800 300 500 450 350M300 800C300 800 300 450 150 300M300 600L380 520M300 500L220 420M450 350C520 280 550 150 550 150M150 300C80 230 50 100 50 100M450 350L500 300M150 300L100 250' stroke='%23D9D0BE' stroke-width='1'/%3E%3Ccircle cx='550' cy='150' r='3' fill='%23D9D0BE'/%3E%3Ccircle cx='50' cy='100' r='3' fill='%23D9D0BE'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-size: contain
+    }</style>
+</head>
+<body class="bg-parchment min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
+<div class="grain-overlay"></div>
+<!-- Background Wireframe -->
+<div class="absolute inset-y-0 right-0 w-[60%] botanical-bg opacity-40 pointer-events-none"></div>
+<main class="relative z-10 w-full max-w-[400px] flex flex-col gap-6 ml-0 lg:-ml-64 transition-all">
+<!-- Login Card -->
+<div class="bg-cream border border-linen hard-shadow rounded-none w-full overflow-hidden">
+<!-- Card Header Accent -->
+<div class="h-[3px] bg-acid w-full"></div>
+<div class="p-8">
+<header class="mb-6">
+<h1 class="font-headline text-[28px] text-ink leading-none tracking-tight">FedHealth AI</h1>
+<p class="font-body text-[12px] text-fog mt-1 uppercase tracking-widest">Clinical Intelligence Platform</p>
+<div class="double-rule"></div>
+</header>
+<form class="space-y-5">
+<!-- Email Input -->
+<div class="space-y-1.5">
+<label class="block font-body text-[11px] font-bold text-ink uppercase tracking-[0.08em]" for="email">
+                            System Credential / Email
+                        </label>
+<input class="w-full h-[40px] bg-parchment border border-linen rounded-none px-3 font-label text-sm text-ink registration-focus transition-all placeholder:text-linen" id="email" placeholder="user_id@fedhealth.ai" type="email"/>
+</div>
+<!-- Password Input -->
+<div class="space-y-1.5">
+<label class="block font-body text-[11px] font-bold text-ink uppercase tracking-[0.08em]" for="password">
+                            Encryption Key / Password
+                        </label>
+<input class="w-full h-[40px] bg-parchment border border-linen rounded-none px-3 font-label text-sm text-ink registration-focus transition-all" id="password" placeholder="••••••••••••" type="password"/>
+</div>
+<!-- Submit Button -->
+<div class="pt-2">
+<button class="relative group w-full h-[40px] bg-ink text-parchment font-body font-bold text-[13px] uppercase tracking-widest overflow-hidden hover:bg-moss hover:text-acid transition-colors duration-150" type="submit">
+                            Sign In
+                            <!-- Loading Scanner Line (Decorative) -->
+<div class="scanning-line opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</button>
+</div>
+</form>
+<footer class="mt-8 text-center">
+<p class="font-body text-[11px] text-fog leading-relaxed italic">
+                        Registration is closed. <br/>
+                        Contact your system administrator for access.
+                    </p>
+</footer>
+</div>
+</div>
+<!-- Demo Accounts Section -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-2 w-full">
+<!-- Admin -->
+<div class="bg-cream border border-linen p-3 rounded-none border-t-[3px] border-t-acid cursor-pointer hover:bg-parchment transition-colors">
+<p class="font-body font-semibold text-[11px] text-ink truncate">Head Triage</p>
+<p class="font-label text-[10px] text-fog truncate mt-0.5">admin@fedhealth.ai</p>
+</div>
+<!-- Analyst -->
+<div class="bg-cream border border-linen p-3 rounded-none border-t-[3px] border-t-tertiary cursor-pointer hover:bg-parchment transition-colors">
+<p class="font-body font-semibold text-[11px] text-ink truncate">Genomics Lead</p>
+<p class="font-label text-[10px] text-fog truncate mt-0.5">ana@fedhealth.ai</p>
+</div>
+<!-- Hospital -->
+<div class="bg-cream border border-linen p-3 rounded-none border-t-[3px] border-t-secondary cursor-pointer hover:bg-parchment transition-colors">
+<p class="font-body font-semibold text-[11px] text-ink truncate">Site Admin</p>
+<p class="font-label text-[10px] text-fog truncate mt-0.5">site@fedhealth.ai</p>
+</div>
+<!-- Critical -->
+<div class="bg-cream border border-linen p-3 rounded-none border-t-[3px] border-t-sienna cursor-pointer hover:bg-parchment transition-colors">
+<p class="font-body font-semibold text-[11px] text-ink truncate">ER Response</p>
+<p class="font-label text-[10px] text-fog truncate mt-0.5">emerg@fedhealth.ai</p>
+</div>
+</div>
+</main>
+<!-- Branding Element (Bottom Right) -->
+<div class="fixed bottom-8 right-8 text-right hidden md:block">
+<p class="font-label text-[10px] text-linen uppercase tracking-[0.2em] mb-1">Federated Intelligence</p>
+<p class="font-headline text-xl text-linen opacity-60">Auth-Module v2.4.0</p>
+</div>
+<!-- Aesthetic Specimen IDs -->
+<div class="absolute top-8 left-8 space-y-2 opacity-30 pointer-events-none">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 bg-acid"></span>
+<span class="font-label text-[9px] text-ink">NODE_CONNECTED: [SFO_STATION_01]</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 bg-linen"></span>
+<span class="font-label text-[9px] text-ink">ENCRYPTION: AES_256_GCM</span>
+</div>
+</div>
+</body></html>
