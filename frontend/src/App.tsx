@@ -52,7 +52,7 @@ const App = () => {
 
   return (
     <Router>
-      <div className="min-h-screen bg-slate-950 font-sans antialiased text-white selection:bg-blue-500/20">
+      <div className="min-h-screen bg-parchment font-body text-ink grain-overlay">
         <NavBarWrapper />
         <Routes>
           <Route path="/login" element={<LoginPage />} />

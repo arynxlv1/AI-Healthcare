@@ -1,238 +1,152 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '../store/authStore';
-import { Shield, Lock, Mail, Brain, Activity, Zap, ChevronRight, Wifi } from 'lucide-react';
+import { authApi } from '../lib/api';
 import { toast } from 'sonner';
-import { cn } from '../components/ui/shared';
 
 const DEMO_ACCOUNTS = [
-  { role: 'patient',        email: 'patient@example.com',  label: 'Patient',        color: 'text-blue-400    bg-blue-500/10    border-blue-500/20'   },
-  { role: 'doctor',         email: 'doctor@example.com',   label: 'Doctor',         color: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' },
-  { role: 'hospital_admin', email: 'admin@hosp001.com',    label: 'Hospital Admin', color: 'text-violet-400  bg-violet-500/10  border-violet-500/20'  },
-  { role: 'super_admin',    email: 'admin@example.com',    label: 'Super Admin',    color: 'text-amber-400   bg-amber-500/10   border-amber-500/20'   },
+  { label: 'Patient',        email: 'patient@example.com',  accent: 'border-t-acid'   },
+  { label: 'Doctor',         email: 'doctor@example.com',   accent: 'border-t-[#C97B84]' },
+  { label: 'Hospital Admin', email: 'admin@hosp001.com',    accent: 'border-t-ochre'  },
+  { label: 'Super Admin',    email: 'admin@example.com',    accent: 'border-t-sienna' },
 ];
-
-// Floating particle
-const Particle = ({ x, y, size, duration, delay }: { x: number; y: number; size: number; duration: number; delay: number }) => (
-  <motion.div
-    className="absolute rounded-full bg-blue-400/20 pointer-events-none"
-    style={{ left: `${x}%`, top: `${y}%`, width: size, height: size }}
-    animate={{ y: [0, -30, 0], opacity: [0, 0.6, 0], scale: [0.8, 1.2, 0.8] }}
-    transition={{ duration, repeat: Infinity, delay, ease: 'easeInOut' }}
-  />
-);
-
-const PARTICLES = Array.from({ length: 18 }, (_, i) => ({
-  id: i,
-  x: Math.random() * 100,
-  y: Math.random() * 100,
-  size: 4 + Math.random() * 8,
-  duration: 4 + Math.random() * 4,
-  delay: Math.random() * 4,
-}));
 
 export const LoginPage = () => {
   const [email, setEmail]       = useState('');
   const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [focusedField, setFocusedField] = useState<'email' | 'password' | null>(null);
-  const [filledRole, setFilledRole] = useState<string | null>(null);
-  const setAuth  = useAuthStore(s => s.setAuth);
+  const [loading, setLoading]   = useState(false);
+  const setAuth  = useAuthStore((s) => s.setAuth);
   const navigate = useNavigate();
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
+    setLoading(true);
     try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({ username: email, password }),
-      });
-      if (!res.ok) throw new Error('Invalid credentials');
-      const data = await res.json();
-
+      const data = await authApi.login(email, password);
       let hospital_id: string | undefined;
       try { hospital_id = JSON.parse(atob(data.access_token.split('.')[1])).hospital_id; } catch {}
-
       setAuth(data.access_token, { email, role: data.role, hospital_id });
-      toast.success(`Welcome back — signed in as ${data.role.replace('_', ' ')}`);
-
+      toast.success(`Signed in as ${data.role.replace('_', ' ')}`);
       const routes: Record<string, string> = {
         patient: '/patient', doctor: '/doctor',
         hospital_admin: '/hospital', super_admin: '/admin',
       };
       navigate(routes[data.role] ?? '/');
     } catch {
-      toast.error('Login failed — check your credentials');
+      toast.error('Authentication failed — check credentials');
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
-  const quickFill = (acc: typeof DEMO_ACCOUNTS[0]) => {
-    setEmail(acc.email);
-    setPassword('password');
-    setFilledRole(acc.role);
-  };
-
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 overflow-hidden">
-      {/* Animated background blobs */}
-      <div className="fixed inset-0 pointer-events-none">
-        <motion.div
-          className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-blue-600/8 rounded-full blur-3xl"
-          animate={{ scale: [1, 1.1, 1], x: [0, 20, 0] }}
-          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-violet-600/8 rounded-full blur-3xl"
-          animate={{ scale: [1, 1.15, 1], x: [0, -20, 0] }}
-          transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-        />
-        <motion.div
-          className="absolute top-1/3 right-1/3 w-[300px] h-[300px] bg-cyan-500/5 rounded-full blur-3xl"
-          animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }}
-          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        {/* Floating particles */}
-        {PARTICLES.map(p => <Particle key={p.id} {...p} />)}
-        {/* Grid overlay */}
-        <div className="absolute inset-0 opacity-[0.03]"
-          style={{ backgroundImage: 'linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
+    <div className="min-h-screen bg-parchment flex items-center justify-center p-6 relative overflow-hidden grain-overlay">
+      {/* Botanical SVG background */}
+      <div className="absolute inset-y-0 right-0 w-[60%] pointer-events-none opacity-40">
+        <svg width="100%" height="100%" viewBox="0 0 600 800" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+          <path d="M300 800C300 800 300 500 450 350M300 800C300 800 300 450 150 300M300 600L380 520M300 500L220 420M450 350C520 280 550 150 550 150M150 300C80 230 50 100 50 100M450 350L500 300M150 300L100 250" stroke="#D9D0BE" strokeWidth="1"/>
+          <circle cx="550" cy="150" r="3" fill="#D9D0BE"/>
+          <circle cx="50" cy="100" r="3" fill="#D9D0BE"/>
+          <path d="M300 400 Q350 350 400 300 Q450 250 480 200" stroke="#D9D0BE" strokeWidth="0.5" strokeDasharray="3 3"/>
+          <path d="M300 400 Q250 350 200 300 Q150 250 120 200" stroke="#D9D0BE" strokeWidth="0.5" strokeDasharray="3 3"/>
+          <circle cx="300" cy="400" r="40" stroke="#D9D0BE" strokeWidth="0.5" fill="none"/>
+          <circle cx="300" cy="400" r="20" stroke="#D9D0BE" strokeWidth="0.5" fill="none"/>
+        </svg>
       </div>
 
-      <div className="relative w-full max-w-md space-y-5">
-        {/* Logo */}
-        <motion.div
-          initial={{ opacity: 0, y: -30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: 'easeOut' }}
-          className="text-center space-y-3"
-        >
-          <motion.div
-            className="inline-flex items-center justify-center w-16 h-16 bg-blue-500/15 border border-blue-500/30 rounded-2xl mb-2 relative"
-            whileHover={{ scale: 1.05, rotate: 3 }}
-          >
-            <Brain className="h-8 w-8 text-blue-400" />
-            <motion.div
-              className="absolute inset-0 rounded-2xl border border-blue-400/40"
-              animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0, 0.5] }}
-              transition={{ duration: 2.5, repeat: Infinity }}
-            />
-          </motion.div>
-          <h1 className="text-3xl font-black text-white tracking-tight">FedHealth AI</h1>
-          <p className="text-slate-400 text-sm">Privacy-preserving medical intelligence</p>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="flex items-center justify-center gap-4 text-xs text-slate-500"
-          >
-            <span className="flex items-center gap-1"><Shield className="h-3 w-3 text-green-500" /> HIPAA Compliant</span>
-            <span className="flex items-center gap-1"><Zap className="h-3 w-3 text-blue-400" /> Federated Learning</span>
-            <span className="flex items-center gap-1"><Activity className="h-3 w-3 text-violet-400" /> Real-time AI</span>
-          </motion.div>
-        </motion.div>
+      {/* Specimen IDs */}
+      <div className="absolute top-8 left-8 space-y-2 opacity-30 pointer-events-none">
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 bg-acid inline-block"/>
+          <span className="font-mono text-[9px] text-ink">NODE_CONNECTED: [SFO_STATION_01]</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 bg-linen inline-block"/>
+          <span className="font-mono text-[9px] text-ink">ENCRYPTION: AES_256_GCM</span>
+        </div>
+      </div>
 
+      <main className="relative z-10 w-full max-w-[400px] flex flex-col gap-6 lg:-ml-32">
         {/* Login card */}
-        <motion.div
-          initial={{ opacity: 0, y: 30, scale: 0.97 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ delay: 0.15, duration: 0.4, ease: 'easeOut' }}
-          className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-7 shadow-2xl"
-        >
-          <form onSubmit={handleLogin} className="space-y-4">
-            {/* Email */}
-            <motion.div className="space-y-1.5" animate={{ scale: focusedField === 'email' ? 1.01 : 1 }} transition={{ duration: 0.15 }}>
-              <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Email</label>
-              <div className="relative">
-                <Mail className={cn('absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 transition-colors', focusedField === 'email' ? 'text-blue-400' : 'text-slate-500')} />
+        <div className="bg-cream border border-linen shadow-hard overflow-hidden">
+          <div className="h-[3px] bg-acid w-full"/>
+          <div className="p-8">
+            <header className="mb-6">
+              <h1 className="font-headline text-[28px] text-ink leading-none tracking-tight">FedHealth AI</h1>
+              <p className="font-mono text-[11px] text-fog mt-1 uppercase tracking-widest">Clinical Intelligence Platform</p>
+              <div className="double-rule"/>
+            </header>
+
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="space-y-1.5">
+                <label className="block font-body text-[11px] font-bold text-ink uppercase tracking-[0.08em]" htmlFor="email">
+                  System Credential / Email
+                </label>
                 <input
-                  type="email" value={email} onChange={e => setEmail(e.target.value)} required
-                  onFocus={() => setFocusedField('email')} onBlur={() => setFocusedField(null)}
-                  placeholder="name@hospital.com"
-                  className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all"
+                  id="email" type="email" required
+                  value={email} onChange={(e) => setEmail(e.target.value)}
+                  placeholder="user_id@fedhealth.ai"
+                  className="registration-focus w-full h-[40px] bg-parchment border border-linen px-3 font-mono text-sm text-ink placeholder:text-linen transition-all outline-none"
                 />
               </div>
-            </motion.div>
 
-            {/* Password */}
-            <motion.div className="space-y-1.5" animate={{ scale: focusedField === 'password' ? 1.01 : 1 }} transition={{ duration: 0.15 }}>
-              <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Password</label>
-              <div className="relative">
-                <Lock className={cn('absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 transition-colors', focusedField === 'password' ? 'text-blue-400' : 'text-slate-500')} />
+              <div className="space-y-1.5">
+                <label className="block font-body text-[11px] font-bold text-ink uppercase tracking-[0.08em]" htmlFor="password">
+                  Encryption Key / Password
+                </label>
                 <input
-                  type="password" value={password} onChange={e => setPassword(e.target.value)} required
-                  onFocus={() => setFocusedField('password')} onBlur={() => setFocusedField(null)}
-                  placeholder="••••••••"
-                  className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all"
+                  id="password" type="password" required
+                  value={password} onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••••••"
+                  className="registration-focus w-full h-[40px] bg-parchment border border-linen px-3 font-mono text-sm text-ink transition-all outline-none"
                 />
               </div>
-            </motion.div>
 
-            <motion.button
-              type="submit" disabled={isLoading}
-              whileHover={!isLoading ? { scale: 1.02 } : {}}
-              whileTap={!isLoading ? { scale: 0.98 } : {}}
-              className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 disabled:bg-blue-600/50 text-white font-semibold py-3 rounded-xl transition-all shadow-lg shadow-blue-500/20 group mt-2 relative overflow-hidden"
-            >
-              {/* Shimmer */}
-              {!isLoading && (
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12"
-                  animate={{ x: ['-100%', '200%'] }}
-                  transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 1 }}
-                />
-              )}
-              <span className="relative flex items-center gap-2">
-                {isLoading ? (
-                  <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}>
-                    <Zap className="h-4 w-4" />
-                  </motion.div>
-                ) : (
-                  <><span>Sign In</span><ChevronRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" /></>
-                )}
-              </span>
-            </motion.button>
-          </form>
-        </motion.div>
+              <div className="pt-2">
+                <button
+                  type="submit" disabled={loading}
+                  className="relative group w-full h-[40px] bg-ink text-parchment font-body font-bold text-[13px] uppercase tracking-widest overflow-hidden hover:bg-moss hover:text-acid transition-colors duration-150 disabled:opacity-60"
+                >
+                  {loading ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <span className="font-mono text-[11px]">AUTHENTICATING</span>
+                      <span className="scanning-line"/>
+                    </span>
+                  ) : 'Sign In'}
+                  {!loading && <span className="scanning-line opacity-0 group-hover:opacity-100 transition-opacity"/>}
+                </button>
+              </div>
+            </form>
+
+            <footer className="mt-8 text-center">
+              <p className="font-body text-[11px] text-fog leading-relaxed italic">
+                Registration is closed.<br/>
+                Contact your system administrator for access.
+              </p>
+            </footer>
+          </div>
+        </div>
 
         {/* Demo accounts */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="bg-white/3 border border-white/8 rounded-2xl p-4"
-        >
-          <p className="text-xs text-slate-500 text-center mb-3 uppercase tracking-wider font-semibold">Demo Accounts — click to fill</p>
-          <div className="grid grid-cols-2 gap-2">
-            {DEMO_ACCOUNTS.map((acc, i) => (
-              <motion.button
-                key={acc.role}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.35 + i * 0.05 }}
-                onClick={() => quickFill(acc)}
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                className={cn(
-                  'flex items-center gap-2 px-3 py-2 rounded-xl border text-xs font-semibold transition-all relative overflow-hidden',
-                  acc.color,
-                  filledRole === acc.role && 'ring-1 ring-current'
-                )}
-              >
-                {filledRole === acc.role && (
-                  <motion.div className="absolute inset-0 bg-current opacity-10" initial={{ scale: 0 }} animate={{ scale: 1 }} />
-                )}
-                <Wifi className="h-3 w-3 shrink-0" />
-                <span className="truncate relative">{acc.label}</span>
-              </motion.button>
-            ))}
-          </div>
-          <p className="text-xs text-slate-600 text-center mt-2">All passwords: <code className="text-slate-400">password</code></p>
-        </motion.div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 w-full">
+          {DEMO_ACCOUNTS.map((acc) => (
+            <button
+              key={acc.email}
+              onClick={() => { setEmail(acc.email); setPassword('password'); }}
+              className={`bg-cream border border-linen border-t-[3px] ${acc.accent} p-3 cursor-pointer hover:bg-parchment transition-colors text-left`}
+            >
+              <p className="font-body font-semibold text-[11px] text-ink truncate">{acc.label}</p>
+              <p className="font-mono text-[10px] text-fog truncate mt-0.5">{acc.email}</p>
+            </button>
+          ))}
+        </div>
+        <p className="text-center font-mono text-[10px] text-fog">All demo passwords: <span className="text-ink">password</span></p>
+      </main>
+
+      {/* Branding */}
+      <div className="fixed bottom-8 right-8 text-right hidden md:block">
+        <p className="font-mono text-[10px] text-linen uppercase tracking-[0.2em] mb-1">Federated Intelligence</p>
+        <p className="font-headline text-xl text-linen opacity-60">Auth-Module v2.4.0</p>
       </div>
     </div>
   );

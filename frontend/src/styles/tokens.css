@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --ink:        #2A2A26;
+  --parchment:  #F5F0E8;
+  --cream:      #EDE7D9;
+  --linen:      #D9D0BE;
+  --acid:       #7AE23A;
+  --moss:       #314E22;
+  --rose-dust:  #C97B84;
+  --sienna:     #A63B10;
+  --ochre:      #C4882A;
+  --charcoal:   #2A2A26;
+  --fog:        #6F7B65;
+
+  /* Hard shadow utility */
+  --shadow-hard: 3px 3px 0px var(--linen);
+  --shadow-hard-hover: 5px 5px 0px #C4C0B4;
+}
+
+/* Selection */
+::selection {
+  background-color: var(--acid);
+  color: var(--ink);
+}
+
+/* Grain overlay */
+.grain-overlay::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Double rule */
+.double-rule {
+  border-top: 1px solid var(--linen);
+  border-bottom: 1px solid var(--linen);
+  height: 4px;
+  width: 100%;
+  margin: 1rem 0;
+}
+
+/* Hard shadow card */
+.hard-shadow {
+  box-shadow: 3px 3px 0 var(--linen);
+}
+.hard-shadow:hover {
+  box-shadow: 5px 5px 0 #C4C0B4;
+  transform: translate(-2px, -2px);
+}
+
+/* Registration focus */
+.registration-focus:focus {
+  outline: 2px solid var(--acid);
+  outline-offset: 2px;
+}
+
+/* Scanning line animation */
+@keyframes scan {
+  0% { left: 0; }
+  100% { left: calc(100% - 40px); }
+}
+.scanning-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 40px;
+  background-color: var(--acid);
+  box-shadow: 0 0 8px var(--acid);
+  animation: scan 1.5s linear infinite;
+}
+
+/* Btn press tactile */
+.btn-press:active {
+  box-shadow: 1px 1px 0 var(--linen);
+  transform: translate(2px, 2px);
+}
+
+/* Custom scrollbar for terminal */
+.terminal-scroll::-webkit-scrollbar { width: 4px; }
+.terminal-scroll::-webkit-scrollbar-track { background: var(--charcoal); }
+.terminal-scroll::-webkit-scrollbar-thumb { background: #363630; }

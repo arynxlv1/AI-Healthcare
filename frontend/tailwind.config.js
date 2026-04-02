@@ -5,69 +5,63 @@ export default {
     "./src/**/*.{js,ts,tsx,jsx}",
   ],
   theme: {
-    container: {
-      center: true,
-      padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
-    },
     extend: {
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
-        },
-        secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
-        },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
-        },
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
-        },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
-        },
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
-        },
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
-        },
+        ink:        '#2A2A26',
+        parchment:  '#F5F0E8',
+        cream:      '#EDE7D9',
+        linen:      '#D9D0BE',
+        acid:       '#7AE23A',
+        moss:       '#314E22',
+        'rose-dust':'#C97B84',
+        sienna:     '#A63B10',
+        ochre:      '#C4882A',
+        charcoal:   '#2A2A26',
+        fog:        '#6F7B65',
+        // Stitch system colours
+        primary:    '#2e6c00',
+        tertiary:   '#a63b10',
+        outline:    '#6f7b65',
+        error:      '#ba1a1a',
+        secondary:  '#486637',
+      },
+      fontFamily: {
+        headline: ['"Playfair Display"', 'serif'],
+        body:     ['"DM Sans"', 'sans-serif'],
+        label:    ['"IBM Plex Mono"', 'monospace'],
+        mono:     ['"IBM Plex Mono"', 'monospace'],
+        sans:     ['"DM Sans"', 'sans-serif'],
+        serif:    ['"Playfair Display"', 'serif'],
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        none:    '0px',
+        DEFAULT: '0px',
+        sm:      '2px',
+        md:      '2px',
+        lg:      '0px',
+        xl:      '0px',
+        full:    '9999px',
+      },
+      boxShadow: {
+        hard:       '3px 3px 0px #D9D0BE',
+        'hard-lg':  '5px 5px 0px #C4C0B4',
+        'hard-sm':  '2px 2px 0px #D9D0BE',
       },
       keyframes: {
-        "accordion-down": {
-          from: { height: 0 },
-          to: { height: "var(--radix-accordion-content-height)" },
+        scan: {
+          '0%':   { left: '0' },
+          '100%': { left: 'calc(100% - 40px)' },
         },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: 0 },
+        heartbeat: {
+          '0%, 100%': { transform: 'scale(1)', opacity: '1' },
+          '50%':      { transform: 'scale(1.4)', opacity: '0.6' },
         },
       },
       animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
+        scan:      'scan 1.5s linear infinite',
+        heartbeat: 'heartbeat 1s ease-in-out infinite',
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [],
 }

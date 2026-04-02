@@ -4,24 +4,31 @@ import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { LoginPage } from '../pages/LoginPage'
 
-// Mock navigate
 const mockNavigate = vi.fn()
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom')
   return { ...actual, useNavigate: () => mockNavigate }
 })
 
-// Mock auth store
 const mockSetAuth = vi.fn()
 vi.mock('../store/authStore', () => ({
   useAuthStore: (selector: any) => selector({ setAuth: mockSetAuth, token: null, user: null }),
 }))
 
-// Mock sonner toast
 vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }))
 
-const renderLogin = () =>
-  render(<MemoryRouter><LoginPage /></MemoryRouter>)
+// Mock the authApi used by LoginPage
+vi.mock('../lib/api', () => ({
+  default: {},
+  authApi: { login: vi.fn() },
+}))
+
+const renderLogin = () => render(<MemoryRouter><LoginPage /></MemoryRouter>)
+
+// Helpers — match actual Stitch placeholders
+const getEmailInput  = () => screen.getByPlaceholderText(/user_id@fedhealth\.ai/i)
+const getPasswordInput = () => screen.getByPlaceholderText(/••••••••••••/)
+const getSignInBtn   = () => screen.getByRole('button', { name: /sign in/i })
 
 describe('LoginPage', () => {
   beforeEach(() => {
@@ -31,8 +38,8 @@ describe('LoginPage', () => {
 
   it('renders email and password inputs', () => {
     renderLogin()
-    expect(screen.getByPlaceholderText(/name@hospital\.com/i)).toBeInTheDocument()
-    expect(screen.getByPlaceholderText(/••••••••/)).toBeInTheDocument()
+    expect(getEmailInput()).toBeInTheDocument()
+    expect(getPasswordInput()).toBeInTheDocument()
   })
 
   it('renders all four demo account buttons', () => {
@@ -45,10 +52,8 @@ describe('LoginPage', () => {
 
   it('fills email when a demo account is clicked', async () => {
     renderLogin()
-    const patientBtn = screen.getByText('Patient')
-    await userEvent.click(patientBtn)
-    const emailInput = screen.getByPlaceholderText(/name@hospital\.com/i) as HTMLInputElement
-    expect(emailInput.value).toBe('patient@example.com')
+    await userEvent.click(screen.getByText('Patient'))
+    expect((getEmailInput() as HTMLInputElement).value).toBe('patient@example.com')
   })
 
   it('shows error toast on failed login', async () => {
@@ -56,28 +61,27 @@ describe('LoginPage', () => {
     ;(global.fetch as any).mockResolvedValueOnce({ ok: false })
     renderLogin()
 
-    await userEvent.type(screen.getByPlaceholderText(/name@hospital\.com/i), 'bad@example.com')
-    await userEvent.type(screen.getByPlaceholderText(/••••••••/), 'wrongpass')
-    fireEvent.submit(screen.getByRole('button', { name: /sign in/i }))
+    await userEvent.type(getEmailInput(), 'bad@example.com')
+    await userEvent.type(getPasswordInput(), 'wrongpass')
+    fireEvent.submit(getSignInBtn())
 
     await waitFor(() => expect(toast.error).toHaveBeenCalledWith(
-      expect.stringMatching(/login failed/i)
+      expect.stringMatching(/authentication failed/i)
     ))
   })
 
   it('calls setAuth and navigates on successful patient login', async () => {
-    ;(global.fetch as any).mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        access_token: 'header.' + btoa(JSON.stringify({ hospital_id: 'HOSP_001' })) + '.sig',
-        role: 'patient',
-      }),
+    const { authApi } = await import('../lib/api')
+    vi.mocked(authApi.login).mockResolvedValueOnce({
+      access_token: 'header.' + btoa(JSON.stringify({ hospital_id: 'HOSP_001' })) + '.sig',
+      token_type: 'bearer',
+      role: 'patient',
     })
     renderLogin()
 
-    await userEvent.type(screen.getByPlaceholderText(/name@hospital\.com/i), 'patient@example.com')
-    await userEvent.type(screen.getByPlaceholderText(/••••••••/), 'password')
-    fireEvent.submit(screen.getByRole('button', { name: /sign in/i }))
+    await userEvent.type(getEmailInput(), 'patient@example.com')
+    await userEvent.type(getPasswordInput(), 'password')
+    fireEvent.submit(getSignInBtn())
 
     await waitFor(() => {
       expect(mockSetAuth).toHaveBeenCalled()
@@ -86,18 +90,17 @@ describe('LoginPage', () => {
   })
 
   it('navigates to /admin for super_admin role', async () => {
-    ;(global.fetch as any).mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        access_token: 'header.' + btoa(JSON.stringify({})) + '.sig',
-        role: 'super_admin',
-      }),
+    const { authApi } = await import('../lib/api')
+    vi.mocked(authApi.login).mockResolvedValueOnce({
+      access_token: 'header.' + btoa(JSON.stringify({})) + '.sig',
+      token_type: 'bearer',
+      role: 'super_admin',
     })
     renderLogin()
 
-    await userEvent.type(screen.getByPlaceholderText(/name@hospital\.com/i), 'admin@example.com')
-    await userEvent.type(screen.getByPlaceholderText(/••••••••/), 'password')
-    fireEvent.submit(screen.getByRole('button', { name: /sign in/i }))
+    await userEvent.type(getEmailInput(), 'admin@example.com')
+    await userEvent.type(getPasswordInput(), 'password')
+    fireEvent.submit(getSignInBtn())
 
     await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('/admin'))
   })
