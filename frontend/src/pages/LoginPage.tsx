@@ -18,14 +18,13 @@ export const LoginPage = () => {
   const setAuth  = useAuthStore((s) => s.setAuth);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const doLogin = async (emailVal: string, passwordVal: string) => {
     setLoading(true);
     try {
-      const data = await authApi.login(email, password);
+      const data = await authApi.login(emailVal, passwordVal);
       let hospital_id: string | undefined;
       try { hospital_id = JSON.parse(atob(data.access_token.split('.')[1])).hospital_id; } catch {}
-      setAuth(data.access_token, { email, role: data.role, hospital_id });
+      setAuth(data.access_token, { email: emailVal, role: data.role, hospital_id });
       toast.success(`Signed in as ${data.role.replace('_', ' ')}`);
       const routes: Record<string, string> = {
         patient: '/patient', doctor: '/doctor',
@@ -37,6 +36,11 @@ export const LoginPage = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await doLogin(email, password);
   };
 
   return (
@@ -132,7 +136,7 @@ export const LoginPage = () => {
           {DEMO_ACCOUNTS.map((acc) => (
             <button
               key={acc.email}
-              onClick={() => { setEmail(acc.email); setPassword('password'); }}
+              onClick={() => { setEmail(acc.email); setPassword('password'); doLogin(acc.email, 'password'); }}
               className={`bg-cream border border-linen border-t-[3px] ${acc.accent} p-3 cursor-pointer hover:bg-parchment transition-colors text-left`}
             >
               <p className="font-body font-semibold text-[11px] text-ink truncate">{acc.label}</p>

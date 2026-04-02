@@ -11,9 +11,12 @@ const ACTION_COLORS: Record<string, string> = {
 };
 
 export const AuditLogTable: React.FC = () => {
-  const [page, setPage]         = useState(1);
-  const [search, setSearch]     = useState('');
-  const [expanded, setExpanded] = useState<string | null>(null);
+  const [page, setPage]           = useState(1);
+  const [search, setSearch]       = useState('');
+  const [actionFilter, setAction] = useState('');
+  const [dateFrom, setDateFrom]   = useState('');
+  const [dateTo, setDateTo]       = useState('');
+  const [expanded, setExpanded]   = useState<string | null>(null);
   const PAGE_SIZE = 50;
 
   const { data: logs = [], isLoading } = useQuery<AuditLog[]>({
@@ -21,12 +24,17 @@ export const AuditLogTable: React.FC = () => {
     queryFn: () => auditApi.logs(page, PAGE_SIZE),
   });
 
-  const filtered = logs.filter((l) =>
-    !search ||
-    l.action?.toLowerCase().includes(search.toLowerCase()) ||
-    l.user_id?.toLowerCase().includes(search.toLowerCase()) ||
-    l.resource_type?.toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered = logs.filter((l) => {
+    if (search && !l.action?.toLowerCase().includes(search.toLowerCase()) &&
+        !l.user_id?.toLowerCase().includes(search.toLowerCase()) &&
+        !l.resource_type?.toLowerCase().includes(search.toLowerCase())) return false;
+    if (actionFilter && l.action !== actionFilter) return false;
+    if (dateFrom && new Date(l.created_at) < new Date(dateFrom)) return false;
+    if (dateTo   && new Date(l.created_at) > new Date(dateTo + 'T23:59:59')) return false;
+    return true;
+  });
+
+  const uniqueActions = Array.from(new Set(logs.map((l) => l.action))).sort();
 
   const exportJSON = () => {
     const blob = new Blob([JSON.stringify(logs, null, 2)], { type: 'application/json' });
@@ -44,11 +52,6 @@ export const AuditLogTable: React.FC = () => {
           <p className="font-mono text-[10px] text-fog uppercase mt-1">Transaction History — Last 24 Hours</p>
         </div>
         <div className="flex items-center gap-3">
-          <input
-            value={search} onChange={(e) => setSearch(e.target.value)}
-            placeholder="QUERY LOGS..."
-            className="registration-focus bg-parchment border border-linen font-mono text-[10px] px-3 py-2 w-48 focus:outline-none placeholder:text-fog uppercase"
-          />
           <button
             onClick={exportJSON}
             className="border-2 border-ink px-4 py-2 font-mono text-[11px] uppercase tracking-widest text-ink hover:bg-ink hover:text-parchment transition-all"
@@ -56,6 +59,40 @@ export const AuditLogTable: React.FC = () => {
             EXPORT_MANIFEST
           </button>
         </div>
+      </div>
+
+      {/* Filter bar */}
+      <div className="flex flex-wrap gap-3 mb-6">
+        <input
+          value={search} onChange={(e) => setSearch(e.target.value)}
+          placeholder="SEARCH USER / RESOURCE..."
+          className="registration-focus bg-parchment border border-linen font-mono text-[10px] px-3 py-2 w-48 focus:outline-none placeholder:text-fog uppercase"
+        />
+        <select
+          value={actionFilter} onChange={(e) => setAction(e.target.value)}
+          className="registration-focus bg-parchment border border-linen font-mono text-[10px] px-3 py-2 focus:outline-none text-ink uppercase"
+        >
+          <option value="">ALL ACTIONS</option>
+          {uniqueActions.map((a) => (
+            <option key={a} value={a}>{a}</option>
+          ))}
+        </select>
+        <input
+          type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)}
+          className="registration-focus bg-parchment border border-linen font-mono text-[10px] px-3 py-2 focus:outline-none text-ink"
+        />
+        <input
+          type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)}
+          className="registration-focus bg-parchment border border-linen font-mono text-[10px] px-3 py-2 focus:outline-none text-ink"
+        />
+        {(search || actionFilter || dateFrom || dateTo) && (
+          <button
+            onClick={() => { setSearch(''); setAction(''); setDateFrom(''); setDateTo(''); }}
+            className="font-mono text-[10px] text-fog hover:text-sienna uppercase px-3 py-2 border border-linen hover:border-sienna transition-all"
+          >
+            CLEAR
+          </button>
+        )}
       </div>
 
       <div className="overflow-x-auto">
